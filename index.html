@@ -1,3 +1,1376 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panduan Praktis: Bangun AI Agent Pertamamu dari Nol</title>
+    <meta name="description" content="Panduan lengkap bahasa Indonesia untuk pemula non-teknis membangun AI Agent guna otomatisasi kerja dan produktivitas tanpa harus jago coding.">
+    
+    <!-- Google Fonts: Plus Jakarta Sans untuk UI & JetBrains Mono untuk Prompt -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'media',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                        },
+                        accent: {
+                            500: '#10b981',
+                            600: '#059669',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom scrollbar & subtle visual polish */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(156, 163, 175, 0.4);
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(156, 163, 175, 0.7);
+        }
+        .glossary-term {
+            border-bottom: 1.5px dashed #6366f1;
+            cursor: help;
+        }
+        .bg-grid-pattern {
+            background-size: 32px 32px;
+            background-image: 
+                linear-gradient(to right, rgba(99, 102, 241, 0.06) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(99, 102, 241, 0.06) 1px, transparent 1px);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 antialiased selection:bg-brand-500 selection:text-white transition-colors duration-200">
+
+    <!-- Top Progress Bar -->
+    <div class="fixed top-0 left-0 right-0 z-50 h-1 bg-slate-200 dark:bg-slate-800">
+        <div id="reading-progress" class="h-full bg-gradient-to-r from-brand-500 to-emerald-500 w-0 transition-all duration-150"></div>
+    </div>
+
+    <!-- Sticky Navigation -->
+    <header class="sticky top-0 z-40 backdrop-blur-md bg-white/85 dark:bg-slate-900/85 border-b border-slate-200/80 dark:border-slate-800/80">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <a href="#" class="flex items-center gap-2.5 font-extrabold text-lg tracking-tight text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500 rounded-lg p-1">
+                <span class="w-8 h-8 rounded-lg bg-brand-600 text-white flex items-center justify-center font-mono text-sm shadow-sm shadow-brand-500/30">AI</span>
+                <span> Kelas<span class="text-brand-600 dark:text-brand-400">Agent</span> <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">[Nama Brand]</span></span>
+            </a>
+
+            <!-- Desktop Nav -->
+            <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600 dark:text-slate-300" aria-label="Navigasi Utama">
+                <a href="#konsep" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Konsep</a>
+                <a href="#use-case" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Contoh Nyata</a>
+                <a href="#roadmap" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">7 Langkah</a>
+                <a href="#template" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Template Prompt</a>
+                <a href="#tools" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Tools</a>
+                <a href="#faq" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">FAQ</a>
+            </nav>
+
+            <!-- Learning Progress Pill -->
+            <div class="flex items-center gap-3">
+                <a href="#roadmap" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-50 dark:bg-brand-950/60 border border-brand-200 dark:border-brand-800/80 text-xs font-semibold text-brand-700 dark:text-brand-300" title="Progres checklist langkah belajarmu">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span>Progres: <strong id="nav-progress-text">0/21</strong></span>
+                </a>
+                <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-500" aria-label="Buka menu navigasi" aria-expanded="false">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 pt-2 pb-4 space-y-1 text-sm font-medium">
+            <a href="#konsep" class="block px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">1. Apa itu AI Agent?</a>
+            <a href="#use-case" class="block px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">2. Contoh Produktivitas</a>
+            <a href="#roadmap" class="block px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">3. Roadmap Build dari Nol</a>
+            <a href="#template" class="block px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">4. Template Prompt</a>
+            <a href="#tools" class="block px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">5. Perbandingan Tools</a>
+            <a href="#keamanan" class="block px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">6. Tips Keamanan</a>
+            <a href="#faq" class="block px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">7. FAQ Pemula</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- 1. HERO SECTION -->
+        <section class="relative overflow-hidden bg-grid-pattern border-b border-slate-200 dark:border-slate-800/80 pt-14 pb-20 sm:pt-24 sm:pb-28">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-300 text-xs sm:text-sm font-semibold mb-6">
+                    <span>✨ Khusus Pemula Non-Teknis • Tanpa Perlu Latar Belakang Coding</span>
+                </div>
+                
+                <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight mb-6">
+                    Bangun Asisten AI yang Bekerja Otomatis Untukmu, <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-emerald-500 dark:from-brand-400 dark:to-emerald-400">Bukan Sekadar Diajak Ngobrol</span>
+                </h1>
+                
+                <p class="text-base sm:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto mb-10 leading-relaxed">
+                    Panduan langkah demi langkah merakit AI agent pertamamu dari nol untuk merangkum dokumen, membalas pesan rutin, dan mengotomatisasi pekerjaan berulang setiap hari.
+                </p>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a href="#konsep" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold shadow-lg shadow-brand-600/25 transition-all transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 text-center">
+                        Mulai Belajar Sekarang →
+                    </a>
+                    <a href="#roadmap" class="w-full sm:w-auto px-7 py-4 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 font-semibold border border-slate-200 dark:border-slate-700 transition-all text-center">
+                        Langsung ke 7 Langkah Praktik
+                    </a>
+                </div>
+
+                <!-- Mini Glossary Banner -->
+                <div class="mt-14 pt-8 border-t border-slate-200/80 dark:border-slate-800/80 grid grid-cols-1 sm:grid-cols-3 gap-4 text-left text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+                    <div class="flex items-start gap-3 p-3 rounded-xl bg-white/60 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800">
+                        <span class="text-lg">💡</span>
+                        <div>
+                            <strong class="text-slate-900 dark:text-white block">Bebas Jargon Rumit</strong>
+                            Setiap istilah teknis baru langsung dijelaskan dengan bahasa sehari-hari.
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3 p-3 rounded-xl bg-white/60 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800">
+                        <span class="text-lg">🛠️</span>
+                        <div>
+                            <strong class="text-slate-900 dark:text-white block">Fokus No-Code</strong>
+                            Bisa mulai merakit dengan klik-dan-tarik (drag & drop) tanpa menulis kode.
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3 p-3 rounded-xl bg-white/60 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800">
+                        <span class="text-lg">✅</span>
+                        <div>
+                            <strong class="text-slate-900 dark:text-white block">Langsung Praktik</strong>
+                            Dilengkapi checklist progres dan template instruksi siap salin.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. APA ITU AI AGENT -->
+        <section id="konsep" class="py-16 sm:py-24 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-3xl mx-auto text-center mb-14">
+                <span class="text-brand-600 dark:text-brand-400 font-bold text-sm uppercase tracking-wider">Bab 1 • Fondasi Dasar</span>
+                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mt-2 mb-4">Apa Sebenarnya AI Agent Itu?</h2>
+                <p class="text-slate-600 dark:text-slate-300 leading-relaxed">
+                    Banyak orang mengira AI Agent sama dengan chatbot biasa seperti ChatGPT. Padahal ada perbedaan besar pada <strong>kemampuan bertindaknya</strong>.
+                </p>
+            </div>
+
+            <!-- Penjelasan Sederhana & Kamus Istilah Pertama -->
+            <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm mb-12">
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div class="space-y-4">
+                        <h3 class="text-xl font-bold text-slate-900 dark:text-white">Dari "Penjawab Pertanyaan" Menjadi "Pelaksana Tugas"</h3>
+                        <p class="text-slate-600 dark:text-slate-300 leading-relaxed text-sm sm:text-base">
+                            Bayangkan <strong>LLM (Large Language Model)</strong>—yaitu <em>otak pintar AI yang dilatih memahami dan menulis bahasa manusia</em>—sebagai seorang penasihat yang terkurung di dalam ruangan tertutup. Dia sangat pintar kalau ditanya, tapi tidak punya tangan untuk membuka emailmu atau mencatat di kalendermu.
+                        </p>
+                        <p class="text-slate-600 dark:text-slate-300 leading-relaxed text-sm sm:text-base">
+                            <strong>AI Agent</strong> adalah otak AI tersebut yang diberi <strong>Instruksi Tujuan</strong>, <strong>Ingatan (Memory)</strong>, dan <strong>Alat Bantu (Tools)</strong> seperti akses ke Google Calendar, Email, Spreadsheet, atau pencarian internet sehingga ia bisa merencanakan dan menyelesaikan tugas sendiri.
+                        </p>
+                    </div>
+
+                    <!-- Comparison Box: Chatbot vs AI Agent -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="p-5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/70">
+                            <div class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Chatbot Biasa</div>
+                            <div class="font-bold text-slate-800 dark:text-slate-100 mb-3 text-base">Pasif & Menunggu</div>
+                            <ul class="space-y-2.5 text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+                                <li class="flex items-start gap-2"><span>❌</span> <span>Hanya merespons saat kamu mengetik chat.</span></li>
+                                <li class="flex items-start gap-2"><span>❌</span> <span>Hasilnya cuma teks di layar chat (kamu harus copy-paste sendiri).</span></li>
+                                <li class="flex items-start gap-2"><span>❌</span> <span>Tidak bisa membuka aplikasi kerjamu.</span></li>
+                            </ul>
+                        </div>
+                        <div class="p-5 rounded-xl bg-brand-50/70 dark:bg-brand-950/40 border border-brand-200 dark:border-brand-800">
+                            <div class="text-xs font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400 mb-2">AI Agent</div>
+                            <div class="font-bold text-slate-900 dark:text-white mb-3 text-base">Aktif & Bertindak</div>
+                            <ul class="space-y-2.5 text-xs sm:text-sm text-slate-700 dark:text-slate-200">
+                                <li class="flex items-start gap-2"><span>✅</span> <span>Bisa jalan otomatis (misal setiap jam 8 pagi atau saat ada email masuk).</span></li>
+                                <li class="flex items-start gap-2"><span>✅</span> <span>Memilih langkah kerja sendiri untuk mencapai tujuan.</span></li>
+                                <li class="flex items-start gap-2"><span>✅</span> <span>Langsung menyimpan draf, mengirim pesan, atau mengisi tabel.</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3 Analogi Sehari-hari -->
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-5 text-center sm:text-left">3 Analogi Sehari-hari Agar Langsung Paham:</h3>
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Analogi 1 -->
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800">
+                    <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center text-xl mb-4">📖</div>
+                    <h4 class="font-bold text-slate-900 dark:text-white mb-2">1. Buku Resep vs Koki Asisten</h4>
+                    <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                        <strong>Chatbot biasa</strong> seperti buku resep yang pintar: kalau kamu tanya cara masak nasi goreng, dia beri tahu langkahnya. <strong>AI Agent</strong> seperti asisten koki: dia cek isi kulkasmu, memotong bahan, memasak, dan menyajikan nasi goreng di meja.
+                    </p>
+                </div>
+                <!-- Analogi 2 -->
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800">
+                    <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xl mb-4">🗺️</div>
+                    <h4 class="font-bold text-slate-900 dark:text-white mb-2">2. Peta Kertas vs Sopir Pribadi</h4>
+                    <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                        <strong>Chatbot biasa</strong> memberi tahu rute tercepat ke bandara, tapi kamu yang menyetir sendiri. <strong>AI Agent</strong> adalah sopir yang mengecek kemacetan, memilih jalan alternatif jika ada perbaikan jalan, dan mengantarmu sampai tujuan.
+                    </p>
+                </div>
+                <!-- Analogi 3 -->
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xl mb-4">🧑‍💼</div>
+                    <h4 class="font-bold text-slate-900 dark:text-white mb-2">3. Anak Magang Baru</h4>
+                    <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                        Anggap AI Agent seperti staf magang baru yang cerdas tapi polos. Agar kerjanya bagus, kamu harus memberinya <strong>SOP tertulis</strong> (instruksi jelas) dan <strong>akses terbatas</strong> hanya ke dokumen yang boleh dia kerjakan.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. CONTOH USE CASE PRODUKTIVITAS -->
+        <section id="use-case" class="py-16 sm:py-24 bg-slate-100/80 dark:bg-slate-900/50 border-y border-slate-200 dark:border-slate-800">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="max-w-3xl mx-auto text-center mb-14">
+                    <span class="text-brand-600 dark:text-brand-400 font-bold text-sm uppercase tracking-wider">Bab 2 • Inspirasi Nyata</span>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mt-2 mb-4">6 Contoh AI Agent untuk Produktivitas Harian</h2>
+                    <p class="text-slate-600 dark:text-slate-300">
+                        Jangan mulai dari hal yang terlalu rumit. Berikut 6 contoh agent sederhana yang paling sering dibuat untuk menghemat waktu kerja.
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Card 1: Agent Email -->
+                    <article class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between hover:border-brand-500/50 transition-all">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-2xl">📬</span>
+                                <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-brand-50 dark:bg-brand-950 text-brand-700 dark:text-brand-300">Komunikasi</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">1. Agent Penyortir & Draf Email</h3>
+                            <div class="space-y-3 text-sm">
+                                <div class="p-3 rounded-xl bg-rose-50/70 dark:bg-rose-950/30 border border-rose-200/60 dark:border-rose-900/50">
+                                    <strong class="text-rose-700 dark:text-rose-300 block text-xs uppercase">Masalah:</strong>
+                                    Kotak masuk penuh email promosi dan pertanyaan berulang, bikin email penting dari klien terlewat.
+                                </div>
+                                <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60">
+                                    <strong class="text-slate-700 dark:text-slate-200 block text-xs uppercase">Tugas Agent:</strong>
+                                    Membaca email baru, memberi label kategori (Penting/Tagihan/Promosi), lalu menyiapkan konsep balasan di folder Draf.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs font-medium text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                            <span>✨ Hasil:</span> <span>Kamu tinggal periksa draf & klik "Kirim" dalam hitungan menit.</span>
+                        </div>
+                    </article>
+
+                    <!-- Card 2: Agent Rangkuman Rapat -->
+                    <article class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between hover:border-brand-500/50 transition-all">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-2xl">📝</span>
+                                <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-brand-50 dark:bg-brand-950 text-brand-700 dark:text-brand-300">Manajemen Rapat</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">2. Agent Notulen & Tindak Lanjut Rapat</h3>
+                            <div class="space-y-3 text-sm">
+                                <div class="p-3 rounded-xl bg-rose-50/70 dark:bg-rose-950/30 border border-rose-200/60 dark:border-rose-900/50">
+                                    <strong class="text-rose-700 dark:text-rose-300 block text-xs uppercase">Masalah:</strong>
+                                    Selesai rapat 1 jam, peserta lupa siapa yang harus mengerjakan apa dan tenggat waktunya kapan.
+                                </div>
+                                <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60">
+                                    <strong class="text-slate-700 dark:text-slate-200 block text-xs uppercase">Tugas Agent:</strong>
+                                    Mengambil transkrip rapat, merangkum 5 poin keputusan utama, mendata daftar tugas per orang, dan mengirimnya ke grup tim.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs font-medium text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                            <span>✨ Hasil:</span> <span>Notulen rapi otomatis terkirim 2 menit setelah rapat bubar.</span>
+                        </div>
+                    </article>
+
+                    <!-- Card 3: Agent Riset -->
+                    <article class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between hover:border-brand-500/50 transition-all">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-2xl">🔎</span>
+                                <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-brand-50 dark:bg-brand-950 text-brand-700 dark:text-brand-300">Riset & Konten</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">3. Agent Riset Berita & Kompetitor</h3>
+                            <div class="space-y-3 text-sm">
+                                <div class="p-3 rounded-xl bg-rose-50/70 dark:bg-rose-950/30 border border-rose-200/60 dark:border-rose-900/50">
+                                    <strong class="text-rose-700 dark:text-rose-300 block text-xs uppercase">Masalah:</strong>
+                                    Habis waktu berjam-jam membuka puluhan tab browser untuk memantau tren industri setiap pagi.
+                                </div>
+                                <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60">
+                                    <strong class="text-slate-700 dark:text-slate-200 block text-xs uppercase">Tugas Agent:</strong>
+                                    Mencari berita terbaru sesuai kata kunci setiap pagi, menyaring yang relevan, dan merangkumnya beserta tautan sumber asli.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs font-medium text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                            <span>✨ Hasil:</span> <span>Kliping riset siap baca di email/Telegram setiap jam 07.30 pagi.</span>
+                        </div>
+                    </article>
+
+                    <!-- Card 4: Agent Jadwal -->
+                    <article class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between hover:border-brand-500/50 transition-all">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-2xl">📅</span>
+                                <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-brand-50 dark:bg-brand-950 text-brand-700 dark:text-brand-300">Manajemen Waktu</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">4. Agent Asisten Jadwal & Pengingat</h3>
+                            <div class="space-y-3 text-sm">
+                                <div class="p-3 rounded-xl bg-rose-50/70 dark:bg-rose-950/30 border border-rose-200/60 dark:border-rose-900/50">
+                                    <strong class="text-rose-700 dark:text-rose-300 block text-xs uppercase">Masalah:</strong>
+                                    Jadwal sering bentrok atau lupa mempersiapkan bahan sebelum rapat penting dimulai.
+                                </div>
+                                <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60">
+                                    <strong class="text-slate-700 dark:text-slate-200 block text-xs uppercase">Tugas Agent:</strong>
+                                    Mengecek Google Calendar setiap pagi, mendeteksi jadwal kosong, dan mengirim ringkasan agenda hari ini beserta dokumen terkait.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs font-medium text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                            <span>✨ Hasil:</span> <span>Tidak ada lagi jadwal terlewat atau salah jam rapat.</span>
+                        </div>
+                    </article>
+
+                    <!-- Card 5: Agent CS FAQ -->
+                    <article class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between hover:border-brand-500/50 transition-all">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-2xl">💬</span>
+                                <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-brand-50 dark:bg-brand-950 text-brand-700 dark:text-brand-300">Layanan Pelanggan</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">5. Agent Penjawab Pertanyaan Pelanggan</h3>
+                            <div class="space-y-3 text-sm">
+                                <div class="p-3 rounded-xl bg-rose-50/70 dark:bg-rose-950/30 border border-rose-200/60 dark:border-rose-900/50">
+                                    <strong class="text-rose-700 dark:text-rose-300 block text-xs uppercase">Masalah:</strong>
+                                    Admin kewalahan membalas chat yang menanyakan hal sama berulang kali (jam buka, daftar harga, cara pesan).
+                                </div>
+                                <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60">
+                                    <strong class="text-slate-700 dark:text-slate-200 block text-xs uppercase">Tugas Agent:</strong>
+                                    Membaca dokumen katalog resmi perusahaan, menjawab pertanyaan umum dengan ramah, dan mengoper ke admin manusia jika ada keluhan khusus.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs font-medium text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                            <span>✨ Hasil:</span> <span>Pelanggan dijawab instan 24 jam, admin fokus ke kasus penting.</span>
+                        </div>
+                    </article>
+
+                    <!-- Card 6: Agent Laporan Harian -->
+                    <article class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between hover:border-brand-500/50 transition-all">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-2xl">📊</span>
+                                <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-brand-50 dark:bg-brand-950 text-brand-700 dark:text-brand-300">Operasional</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">6. Agent Rekap Laporan Harian</h3>
+                            <div class="space-y-3 text-sm">
+                                <div class="p-3 rounded-xl bg-rose-50/70 dark:bg-rose-950/30 border border-rose-200/60 dark:border-rose-900/50">
+                                    <strong class="text-rose-700 dark:text-rose-300 block text-xs uppercase">Masalah:</strong>
+                                    Setiap sore harus menyalin angka penjualan atau update tugas dari Google Sheets untuk dilaporkan ke atasan.
+                                </div>
+                                <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60">
+                                    <strong class="text-slate-700 dark:text-slate-200 block text-xs uppercase">Tugas Agent:</strong>
+                                    Membaca baris terbaru di Google Sheets setiap jam 5 sore, menghitung total, dan menyusun narasi ringkasan pencapaian hari itu.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs font-medium text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                            <span>✨ Hasil:</span> <span>Laporan sore terkirim tepat waktu tanpa rekap manual.</span>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. ROADMAP BUILD DARI NOL (7 LANGKAH INTERAKTIF) -->
+        <section id="roadmap" class="py-16 sm:py-24 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10">
+                <span class="text-brand-600 dark:text-brand-400 font-bold text-sm uppercase tracking-wider">Bab 3 • Panduan Langkah demi Langkah</span>
+                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mt-2 mb-4">Roadmap Membangun AI Agent dari Nol</h2>
+                <p class="text-slate-600 dark:text-slate-300">
+                    Ikuti 7 langkah berurutan ini. Centang kotak di setiap langkah untuk menyimpan progres belajarmu secara otomatis di perangkat ini.
+                </p>
+            </div>
+
+            <!-- Interactive Progress Bar Box -->
+            <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm mb-8">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                    <span class="text-sm font-bold text-slate-800 dark:text-slate-200">Progres Praktikmu</span>
+                    <div class="flex items-center gap-4">
+                        <span id="roadmap-progress-pct" class="text-sm font-extrabold text-brand-600 dark:text-brand-400">0% Selesai (0/21 tugas)</span>
+                        <button id="reset-progress-btn" type="button" class="text-xs text-slate-400 hover:text-rose-500 underline focus:outline-none">Reset Progres</button>
+                    </div>
+                </div>
+                <div class="w-full h-3 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                    <div id="roadmap-progress-bar" class="h-full bg-gradient-to-r from-brand-600 to-emerald-500 w-0 transition-all duration-300 rounded-full"></div>
+                </div>
+            </div>
+
+            <!-- Expand/Collapse All Controls -->
+            <div class="flex justify-end gap-3 mb-4 text-xs font-semibold">
+                <button type="button" id="expand-all-btn" class="px-3 py-1.5 rounded-lg bg-slate-200/70 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300/70">Buka Semua Langkah</button>
+                <button type="button" id="collapse-all-btn" class="px-3 py-1.5 rounded-lg bg-slate-200/70 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300/70">Tutup Semua</button>
+            </div>
+
+            <!-- Accordion Container (Populated/Managed cleanly) -->
+            <div class="space-y-4" id="roadmap-accordion">
+
+                <!-- LANGKAH 1 -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+                    <button type="button" class="accordion-btn w-full px-6 py-5 text-left flex items-center justify-between gap-4 hover:bg-slate-50/80 dark:hover:bg-slate-800/50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-500" aria-expanded="true">
+                        <div class="flex items-center gap-4">
+                            <span class="w-8 h-8 rounded-full bg-brand-600 text-white font-bold text-sm flex items-center justify-center shrink-0">1</span>
+                            <div>
+                                <h3 class="font-bold text-base sm:text-lg text-slate-900 dark:text-white">Tentukan Tujuan & Satu Tugas Spesifik</h3>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">Jangan buat "asisten segalanya". Mulailah dari satu pekerjaan kecil yang jelas.</p>
+                            </div>
+                        </div>
+                        <svg class="accordion-icon w-5 h-5 text-slate-400 transform rotate-180 transition-transform duration-200 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content px-6 pb-6 pt-2 border-t border-slate-100 dark:border-slate-800/80 space-y-4 text-sm">
+                        <div>
+                            <strong class="text-slate-900 dark:text-white block mb-1">🎯 Tujuan:</strong>
+                            <p class="text-slate-600 dark:text-slate-300">Menentukan batas kerja agent dengan rumus sederhana: <strong>Pemicu (Input) → Proses AI → Hasil (Output)</strong>.</p>
+                        </div>
+                        <div>
+                            <strong class="text-slate-900 dark:text-white block mb-1">🛠️ Cara Mengerjakan:</strong>
+                            <p class="text-slate-600 dark:text-slate-300">Tulis 3 pekerjaan yang paling sering kamu lakukan berulang setiap minggu. Pilih satu yang paling mudah dijelaskan ke orang lain dalam 3 kalimat.</p>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200/60 dark:border-emerald-800/60">
+                            <strong class="text-emerald-800 dark:text-emerald-300 block mb-1">💡 Contoh Nyata:</strong>
+                            <p class="text-slate-700 dark:text-slate-300">"Setiap kali ada artikel panjang yang saya simpan di Google Docs (Input), rangkum menjadi 5 poin utama dalam bahasa Indonesia (Proses), lalu kirim hasilnya ke Telegram saya (Output)."</p>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-800/60">
+                            <strong class="text-amber-800 dark:text-amber-300 block mb-1">⚠️ Kesalahan Umum Pemula:</strong>
+                            <p class="text-slate-700 dark:text-slate-300">Ingin langsung membuat 1 agent super yang mengurus email, keuangan, desain, sekaligus membalas WhatsApp di percobaan pertama.</p>
+                        </div>
+                        <div class="pt-2">
+                            <strong class="text-xs uppercase tracking-wider text-slate-400 block mb-2">Checklist Langkah 1:</strong>
+                            <div class="space-y-2">
+                                <label class="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                    <input type="checkbox" data-check-id="s1-1" class="step-check w-4 h-4 rounded text-brand-600 focus:ring-brand-500">
+                                    <span class="text-slate-700 dark:text-slate-200">Saya sudah memilih 1 tugas spesifik yang ingin diotomatisasi hari ini.</span>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                    <input type="checkbox" data-check-id="s1-2" class="step-check w-4 h-4 rounded text-brand-600 focus:ring-brand-500">
+                                    <span class="text-slate-700 dark:text-slate-200">Saya tahu dari mana data awalnya berasal (misal: Email, Form, atau Chat).</span>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                    <input type="checkbox" data-check-id="s1-3" class="step-check w-4 h-4 rounded text-brand-600 focus:ring-brand-500">
+                                    <span class="text-slate-700 dark:text-slate-200">Saya tahu wujud hasil akhirnya (misal: draf pesan atau baris di tabel).</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LANGKAH 2 -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+                    <button type="button" class="accordion-btn w-full px-6 py-5 text-left flex items-center justify-between gap-4 hover:bg-slate-50/80 dark:hover:bg-slate-800/50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-500" aria-expanded="false">
+                        <div class="flex items-center gap-4">
+                            <span class="w-8 h-8 rounded-full bg-brand-600 text-white font-bold text-sm flex items-center justify-center shrink-0">2</span>
+                            <div>
+                                <h3 class="font-bold text-base sm:text-lg text-slate-900 dark:text-white">Pilih Model AI ("Otak") & Platform ("Tubuh")</h3>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">Memilih otak AI yang pas dan aplikasi perakit tanpa coding.</p>
+                            </div>
+                        </div>
+                        <svg class="accordion-icon w-5 h-5 text-slate-400 transform transition-transform duration-200 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content hidden px-6 pb-6 pt-2 border-t border-slate-100 dark:border-slate-800/80 space-y-4 text-sm">
+                        <div>
+                            <strong class="text-slate-900 dark:text-white block mb-1">🎯 Tujuan:</strong>
+                            <p class="text-slate-600 dark:text-slate-300">Menentukan model AI (seperti keluarga Gemini, Claude, atau GPT) dan platform penghubungnya tanpa pusing memikirkan server.</p>
+                        </div>
+                        <div>
+                            <strong class="text-slate-900 dark:text-white block mb-1">🛠️ Cara Mengerjakan:</strong>
+                            <p class="text-slate-600 dark:text-slate-300">Untuk tugas harian seperti merangkum atau menyortir teks, gunakan model kategori <em>cepat & hemat</em> (biasanya bernama "Flash", "Mini", atau "Haiku"). Untuk penghubung aplikasi, pilih platform <strong>No-Code</strong> (tanpa coding) seperti <strong>Make</strong>, <strong>Zapier</strong>, atau <strong>n8n</strong>.</p>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200/60 dark:border-emerald-800/60">
+                            <strong class="text-emerald-800 dark:text-emerald-300 block mb-1">💡 Contoh Nyata:</strong>
+                            <p class="text-slate-700 dark:text-slate-300">Memakai platform visual <strong>n8n</strong> atau <strong>Make</strong> yang dihubungkan ke model AI melalui <strong>API Key</strong> <em>(kode kunci rahasia seperti password khusus agar dua aplikasi bisa saling berbicara secara resmi)</em>.</p>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-800/60">
+                            <strong class="text-amber-800 dark:text-amber-300 block mb-1">⚠️ Kesalahan Umum Pemula:</strong>
+                            <p class="text-slate-700 dark:text-slate-300">Memilih model AI yang paling mahal dan berat untuk tugas sederhana seperti merapikan kalimat, sehingga responsnya lambat dan boros kuota.</p>
+                        </div>
+                        <div class="pt-2">
+                            <strong class="text-xs uppercase tracking-wider text-slate-400 block mb-2">Checklist Langkah 2:</strong>
+                            <div class="space-y-2">
+                                <label class="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                    <input type="checkbox" data-check-id="s2-1" class="step-check w-4 h-4 rounded text-brand-600 focus:ring-brand-500">
+                                    <span class="text-slate-700 dark:text-slate-200">Saya sudah memilih 1 platform pembuat alur (misal: n8n, Make, atau fitur Custom GPT/Gems).</span>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                    <input type="checkbox" data-check-id="s2-2" class="step-check w-4 h-4 rounded text-brand-600 focus:ring-brand-500">
+                                    <span class="text-slate-700 dark:text-slate-200">Saya sudah membuat akun di penyedia model AI pilihan saya.</span>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                    <input type="checkbox" data-check-id="s2-3" class="step-check w-4 h-4 rounded text-brand-600 focus:ring-brand-500">
+                                    <span class="text-slate-700 dark:text-slate-200">Saya sudah memahami apa fungsi API Key dan menyimpannya dengan aman.</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LANGKAH 3 -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+                    <button type="button" class="accordion-btn w-full px-6 py-5 text-left flex items-center justify-between gap-4 hover:bg-slate-50/80 dark:hover:bg-slate-800/50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-500" aria-expanded="false">
+                        <div class="flex items-center gap-4">
+                            <span class="w-8 h-8 rounded-full bg-brand-600 text-white font-bold text-sm flex items-center justify-center shrink-0">3</span>
+                            <div>
+                                <h3 class="font-bold text-base sm:text-lg text-slate-900 dark:text-white">Tulis Instruksi Kerja (System Prompt)</h3>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">Menyusun SOP tertulis agar agent tahu peran, aturan, dan format hasilnya.</p>
+                            </div>
+                        </div>
+                        <svg class="accordion-icon w-5 h-5 text-slate-400 transform transition-transform duration-200 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content hidden px-6 pb-6 pt-2 border-t border-slate-100 dark:border-slate-800/80 space-y-4 text-sm">
+                        <div>
+                            <strong class="text-slate-900 dark:text-white block mb-1">🎯 Tujuan:</strong>
+                            <p class="text-slate-600 dark:text-slate-300">Membuat <strong>System Prompt</strong> <em>(instruksi dasar permanen yang mengatur sifat dan cara kerja AI sebelum ia menerima tugas harian)</em>.</p>
+                        </div>
+                        <div>
+                            <strong class="text-slate-900 dark:text-white block mb-1">🛠️ Cara Mengerjakan:</strong>
+                            <p class="text-slate-600 dark:text-slate-300">Gunakan struktur 4 komponen: <strong>1. Peran (Role)</strong>, <strong>2. Tugas Utama (Task)</strong>, <strong>3. Batasan/Larangan (Constraints)</strong>, dan <strong>4. Format Output</strong>.</p>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200/60 dark:border-emerald-800/60">
+                            <strong class="text-emerald-800 dark:text-emerald-300 block mb-1">💡 Contoh Nyata:</strong>
+                            <p class="text-slate-700 dark:text-slate-300">Daripada menulis <em>"Tolong balas email ini"</em>, tulislah: <em>"Kamu adalah asisten admin yang sopan. Tugasmu membuat draf balasan maksimal 3 paragraf. Jika pengirim menanyakan harga diskon yang tidak ada di daftar, katakan akan dikonfirmasi ke tim sales, jangan mengarang angka."</em></p>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-800/60">
+                            <strong class="text-amber-800 dark:text-amber-300 block mb-1">⚠️ Kesalahan Umum Pemula:</strong>
+                            <p class="text-slate-700 dark:text-slate-300">Tidak memberi tahu AI apa yang harus dilakukan jika informasi kurang, sehingga AI mengalami <strong>Halusinasi</strong> <em>(kondisi saat AI mengarang jawaban palsu dengan nada sangat meyakinkan)</em>.</p>
+                        </div>
+                        <div class="pt-2">
+                            <strong class="text-xs uppercase tracking-wider text-slate-400 block mb-2">Checklist Langkah 3:</strong>
+                            <div class="space-y-2">
+                                <label class="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                    <input type="checkbox" data-check-id="s3-1" class="step-check w-4 h-4 rounded text-brand-600 focus:ring-brand-500">
+                                    <span class="text-slate-700 dark:text-slate-200">Prompt saya sudah memiliki Peran, Tugas, dan Format Output yang jelas.</span>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                    <input type="checkbox" data-check-id="s3-2" class="step-check w-4 h-4 rounded text-brand-600 focus:ring-brand-500">
+                                    <span class="text-slate-700 dark:text-slate-200">Saya sudah menambahkan aturan "Jangan mengarang data jika tidak tahu".</span>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                    <input type="checkbox" data-check-id="s3-3" class="step-check w-4 h-4 rounded text-brand-600 focus:ring-brand-500">
+                                    <span class="text-slate-700 dark:text-slate-200">Saya sudah memberikan 1 contoh hasil yang saya harapkan di dalam prompt.</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LANGKAH 4 -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+                    <button type="button" class="accordion-btn w-full px-6 py-5 text-left flex items-center justify-between gap-4 hover:bg-slate-50/80 dark:hover:bg-slate-800/50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-500" aria-expanded="false">
+                        <div class="flex items-center gap-4">
+                            <span class="w-8 h-8 rounded-full bg-brand-600 text-white font-bold text-sm flex items-center justify-center shrink-0">4</span>
+                            <div>
+                                <h3 class="font-bold text-base sm:text-lg text-slate-900 dark:text-white">Beri Agent Akses ke Tools & Dokumen</h3>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">Menghubungkan otak AI dengan pencarian web, file PDF, kalender, atau email.</p>
+                            </div>
+                        </div>
+                        <svg class="accordion-icon w-5 h-5 text-slate-400 transform transition-transform duration-200 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content hidden px-6 pb-6 pt-2 border-t border-slate-100 dark:border-slate-800/80 space-y-4 text-sm">
+                        <div>
+                            <strong class="text-slate-900 dark:text-white block mb-1">🎯 Tujuan:</strong>
+                            <p class="text-slate-600 dark:text-slate-300">Memberikan "tangan" dan sumber referensi nyata kepada agent supaya ia bisa membaca data terbaru dan menyimpan hasil kerjanya.</p>
+                        </div>
+                        <div>
+                            <strong class="text-slate-900 dark:text-white block mb-1">🛠️ Cara Mengerjakan:</strong>
+                            <p class="text-slate-600 dark:text-slate-300">Hubungkan hanya aplikasi yang dibutuhkan (misalnya Google Sheets untuk membaca daftar harga, atau Google Docs untuk menyimpan ringkasan). Teknik memberi dokumen referensi khusus agar dibaca AI ini sering disebut <strong>RAG / Knowledge Base</strong> <em>(perpustakaan pribadi berisi file milikmu yang wajib dibaca AI sebelum menjawab)</em>.</p>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200/60 dark:border-emerald-800/60">
+                            <strong class="text-emerald-800 dark:text-emerald-300 block mb-1">💡 Contoh Nyata:</strong>
+                            <p class="text-slate-700 dark:text-slate-300">Memberi agent akses "Baca Saja" (Read-Only) ke file PDF FAQ produk, dan akses "Tulis Draf" ke Gmail.</p>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-800/60">
+                            <strong class="text-amber-800 dark:text-amber-300 block mb-1">⚠️ Kesalahan Umum Pemula:</strong>
+                            <p class="text-slate-700 dark:text-slate-300">Memberikan izin hapus (Delete) atau kirim pesan langsung ke seluruh kontak pelanggan saat agent masih tahap belajar.</p>
+                        </div>
+                        <div class="pt-2">
+                            <strong class="text-xs uppercase tracking-wider text-slate-400 block mb-2">Checklist Langkah 4:</strong>
+                            <div class="space-y-2">
+                                <label class="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                    <input type="checkbox" data-check-id="s4-1" class="step-check w-4 h-4 rounded text-brand-600 focus:ring-brand-500">
+                                    <span class="text-slate-700 dark:text-slate-200">Saya sudah menyiapkan dokumen referensi (jika agent butuh data khusus).</span>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                    <input type="checkbox" data-check-id="s4-2" class="step-check w-4 h-4 rounded text-brand-600 focus:ring-brand-500">
+                                    <span class="text-slate-700 dark:text-slate-200">Saya sudah menghubungkan tool yang diperlukan (misal: Google Docs/Sheets/Email).</span>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                    <input type="checkbox" data-check-id="s4-3" class="step-check w-4 h-4 rounded text-brand-600 focus:ring-brand-500">
+                                    <span class="text-slate-700 dark:text-slate-200">Saya membatasi izin akses seperlunya (tidak memberi akses hapus file penting).</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LANGKAH 5 -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+                    <button type="button" class="accordion-btn w-full px-6 py-5 text-left flex items-center justify-between gap-4 hover:bg-slate-50/80 dark:hover:bg-slate-800/50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-500" aria-expanded="false">
+                        <div class="flex items-center gap-4">
+                            <span class="w-8 h-8 rounded-full bg-brand-600 text-white font-bold text-sm flex items-center justify-center shrink-0">5</span>
+                            <div>
+                                <h3 class="font-bold text-base sm:text-lg text-slate-900 dark:text-white">Bangun Alur Kerja (Workflow)</h3>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">Menyambungkan pemicu, proses AI, dan tindakan akhir menjadi satu rangkaian.</p>
+                            </div>
+                        </div>
+                        <svg class="accordion-icon w-5 h-5 text-slate-400 transform transition-transform duration-200 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content hidden px-6 pb-6 pt-2 border-t border-slate-100 dark:border-slate-800/80 space-y-4 text-sm">
+                        <div>
+                            <strong class="text-slate-900 dark:text-white block mb-1">🎯 Tujuan:</strong>
+                            <p class="text-slate-600 dark:text-slate-300">Merangkai urutan kerja dari awal sampai akhir menggunakan blok visual di platform seperti n8n, Make, atau Zapier.</p>
+                        </div>
+                        <div>
+                            <strong class="text-slate-900 dark:text-white block mb-1">🛠️ Cara Mengerjakan:</strong>
+                            <p class="text-slate-600 dark:text-slate-300">Susun minimal 3 blok utama: <strong>Blok 1: Trigger (Pemicu)</strong> seperti jadwal jam 8 pagi atau pesan masuk via <strong>Webhook</strong> <em>(jalur pengiriman pesan otomatis antar-aplikasi secara instan saat ada kejadian baru)</em> → <strong>Blok 2: AI Agent</strong> (tempat menaruh System Prompt & Tools) → <strong>Blok 3: Action</strong> (kirim hasil ke Email/Notion/Telegram).</p>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200/60 dark:border-emerald-800/60">
+                            <strong class="text-emerald-800 dark:text-emerald-300 block mb-1">💡 Contoh Nyata:</strong>
+                            <p class="text-slate-700 dark:text-slate-300">Di n8n: Pasang node <em>Gmail Trigger (On Message Received)</em> → sambungkan ke node <em>AI Agent</em> → sambungkan ke node <em>Gmail (Create Draft)</em>.</p>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-800/60">
+                            <strong class="text-amber-800 dark:text-amber-300 block mb-1">⚠️ Kesalahan Umum Pemula:</strong>
+                            <p class="text-slate-700 dark:text-slate-300">Membuat cabang alur yang terlalu rumit (sampai puluhan langkah) sebelum memastikan alur 3 blok dasarnya berhasil jalan.</p>
+                        </div>
+                        <div class="pt-2">
+                            <strong class="text-xs uppercase tracking-wider text-slate-400 block mb-2">Checklist Langkah 5:</strong>
+                            <div class="space-y-2">
+                                <label class="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                    <input type="checkbox" data-check-id="s5-1" class="step-check w-4 h-4 rounded text-brand-600 focus:ring-brand-500">
+                                    <span class="text-slate-700 dark:text-slate-200">Blok pemicu (Trigger) sudah berhasil menarik 1 contoh data masuk.</span>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                    <input type="checkbox" data-check-id="s5-2" class="step-check w-4 h-4 rounded text-brand-600 focus:ring-brand-500">
+                                    <span class="text-slate-700 dark:text-slate-200">Blok AI Agent sudah menerima data dari pemicu dan menghasilkan respons.</span>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                    <input type="checkbox" data-check-id="s5-3" class="step-check w-4 h-4 rounded text-brand-600 focus:ring-brand-500">
+                                    <span class="text-slate-700 dark:text-slate-200">Blok tindakan akhir sudah berhasil menyimpan/mengirimkan hasil output.</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LANGKAH 6 -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+                    <button type="button" class="accordion-btn w-full px-6 py-5 text-left flex items-center justify-between gap-4 hover:bg-slate-50/80 dark:hover:bg-slate-800/50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-500" aria-expanded="false">
+                        <div class="flex items-center gap-4">
+                            <span class="w-8 h-8 rounded-full bg-brand-600 text-white font-bold text-sm flex items-center justify-center shrink-0">6</span>
+                            <div>
+                                <h3 class="font-bold text-base sm:text-lg text-slate-900 dark:text-white">Uji Coba & Perbaiki (Testing)</h3>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">Menguji agent dengan berbagai skenario normal maupun input yang menjebak.</p>
+                            </div>
+                        </div>
+                        <svg class="accordion-icon w-5 h-5 text-slate-400 transform transition-transform duration-200 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content hidden px-6 pb-6 pt-2 border-t border-slate-100 dark:border-slate-800/80 space-y-4 text-sm">
+                        <div>
+                            <strong class="text-slate-900 dark:text-white block mb-1">🎯 Tujuan:</strong>
+                            <p class="text-slate-600 dark:text-slate-300">Memastikan agent tidak bingung ketika menerima pesan yang singkat, tidak lengkap, atau di luar topik.</p>
+                        </div>
+                        <div>
+                            <strong class="text-slate-900 dark:text-white block mb-1">🛠️ Cara Mengerjakan:</strong>
+                            <p class="text-slate-600 dark:text-slate-300">Lakukan minimal 5 kali percobaan dengan kasus berbeda: 3 pesan normal, 1 pesan yang sangat pendek/typo, dan 1 pesan di luar konteks. Perbaiki kalimat di System Prompt setiap kali menemukan jawaban yang kurang pas.</p>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200/60 dark:border-emerald-800/60">
+                            <strong class="text-emerald-800 dark:text-emerald-300 block mb-1">💡 Contoh Nyata:</strong>
+                            <p class="text-slate-700 dark:text-slate-300">Mengirimkan email kosong tanpa isi ke Agent Penyortir Email untuk melihat apakah ia error atau tetap tenang menandainya sebagai "Perlu Cek Manual".</p>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-800/60">
+                            <strong class="text-amber-800 dark:text-amber-300 block mb-1">⚠️ Kesalahan Umum Pemula:</strong>
+                            <p class="text-slate-700 dark:text-slate-300">Hanya menguji 1 kali dengan contoh paling rapi, lalu langsung menganggap agent sudah 100% sempurna.</p>
+                        </div>
+                        <div class="pt-2">
+                            <strong class="text-xs uppercase tracking-wider text-slate-400 block mb-2">Checklist Langkah 6:</strong>
+                            <div class="space-y-2">
+                                <label class="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                    <input type="checkbox" data-check-id="s6-1" class="step-check w-4 h-4 rounded text-brand-600 focus:ring-brand-500">
+                                    <span class="text-slate-700 dark:text-slate-200">Saya sudah menguji agent dengan minimal 3 data/pesan asli.</span>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                    <input type="checkbox" data-check-id="s6-2" class="step-check w-4 h-4 rounded text-brand-600 focus:ring-brand-500">
+                                    <span class="text-slate-700 dark:text-slate-200">Saya sudah menguji kasus tidak wajar (pesan kosong atau pertanyaan di luar topik).</span>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                    <input type="checkbox" data-check-id="s6-3" class="step-check w-4 h-4 rounded text-brand-600 focus:ring-brand-500">
+                                    <span class="text-slate-700 dark:text-slate-200">Saya sudah merevisi System Prompt berdasarkan hasil uji coba.</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LANGKAH 7 -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+                    <button type="button" class="accordion-btn w-full px-6 py-5 text-left flex items-center justify-between gap-4 hover:bg-slate-50/80 dark:hover:bg-slate-800/50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-500" aria-expanded="false">
+                        <div class="flex items-center gap-4">
+                            <span class="w-8 h-8 rounded-full bg-brand-600 text-white font-bold text-sm flex items-center justify-center shrink-0">7</span>
+                            <div>
+                                <h3 class="font-bold text-base sm:text-lg text-slate-900 dark:text-white">Aktifkan (Deploy) & Evaluasi Berkala</h3>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">Menyalakan mode otomatis dan memantau kinerjanya di minggu pertama.</p>
+                            </div>
+                        </div>
+                        <svg class="accordion-icon w-5 h-5 text-slate-400 transform transition-transform duration-200 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content hidden px-6 pb-6 pt-2 border-t border-slate-100 dark:border-slate-800/80 space-y-4 text-sm">
+                        <div>
+                            <strong class="text-slate-900 dark:text-white block mb-1">🎯 Tujuan:</strong>
+                            <p class="text-slate-600 dark:text-slate-300">Melakukan <strong>Deploy</strong> <em>(mengaktifkan alur kerja agar berjalan otomatis di latar belakang tanpa perlu kamu klik manual lagi)</em> dan memantau hasilnya.</p>
+                        </div>
+                        <div>
+                            <strong class="text-slate-900 dark:text-white block mb-1">🛠️ Cara Mengerjakan:</strong>
+                            <p class="text-slate-600 dark:text-slate-300">Nyalakan tombol "Active/Publish" di platform pilihanmu. Selama 1 minggu pertama, luangkan 5 menit setiap sore untuk melihat riwayat pekerjaan (Execution Log) sang agent.</p>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200/60 dark:border-emerald-800/60">
+                            <strong class="text-emerald-800 dark:text-emerald-300 block mb-1">💡 Contoh Nyata:</strong>
+                            <p class="text-slate-700 dark:text-slate-300">Memasang batas kuota maksimal pemakaian bulanan di akun AI-mu dan mengecek apakah rangkuman hariannya benar-benar menghemat waktumu.</p>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-800/60">
+                            <strong class="text-amber-800 dark:text-amber-300 block mb-1">⚠️ Kesalahan Umum Pemula:</strong>
+                            <p class="text-slate-700 dark:text-slate-300">Meninggalkan agent tanpa pernah dicek sama sekali, atau lupa membatasi alur sehingga terjadi perulangan tanpa henti (infinite loop).</p>
+                        </div>
+                        <div class="pt-2">
+                            <strong class="text-xs uppercase tracking-wider text-slate-400 block mb-2">Checklist Langkah 7:</strong>
+                            <div class="space-y-2">
+                                <label class="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                    <input type="checkbox" data-check-id="s7-1" class="step-check w-4 h-4 rounded text-brand-600 focus:ring-brand-500">
+                                    <span class="text-slate-700 dark:text-slate-200">Workflow agent saya sudah diaktifkan (Active/Published).</span>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                    <input type="checkbox" data-check-id="s7-2" class="step-check w-4 h-4 rounded text-brand-600 focus:ring-brand-500">
+                                    <span class="text-slate-700 dark:text-slate-200">Saya sudah memasang batas pemakaian (usage limit) di akun penyedia AI.</span>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                    <input type="checkbox" data-check-id="s7-3" class="step-check w-4 h-4 rounded text-brand-600 focus:ring-brand-500">
+                                    <span class="text-slate-700 dark:text-slate-200">Saya sudah menjadwalkan waktu evaluasi singkat setelah 1 minggu pemakaian.</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 5. TEMPLATE SIAP PAKAI -->
+        <section id="template" class="py-16 sm:py-24 bg-slate-900 text-slate-100 border-y border-slate-800">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="max-w-3xl mx-auto text-center mb-14">
+                    <span class="text-emerald-400 font-bold text-sm uppercase tracking-wider">Bab 4 • Amunisi Praktik</span>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold text-white mt-2 mb-4">3 Template System Prompt Siap Salin</h2>
+                    <p class="text-slate-300">
+                        Salin salah satu instruksi di bawah ini ke dalam AI Agent atau asisten kerjamu. Cukup ganti teks di dalam tanda kurung siku <code class="text-amber-300 font-mono">[seperti ini]</code> sesuai kebutuhanmu.
+                    </p>
+                </div>
+
+                <div class="grid lg:grid-cols-3 gap-6">
+                    <!-- Prompt 1 -->
+                    <div class="bg-slate-950 rounded-2xl border border-slate-800 flex flex-col justify-between overflow-hidden">
+                        <div>
+                            <div class="px-5 py-4 bg-slate-900/90 border-b border-slate-800 flex items-center justify-between gap-2">
+                                <div>
+                                    <span class="text-xs font-mono text-emerald-400 block">Template #1</span>
+                                    <h3 class="font-bold text-white text-sm sm:text-base">Agent Perangkum Rapat & Dokumen</h3>
+                                </div>
+                                <button type="button" data-copy-target="prompt-1" class="copy-btn px-3 py-1.5 rounded-lg bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold transition-colors flex items-center gap-1.5 shrink-0 focus:outline-none focus:ring-2 focus:ring-brand-400">
+                                    <span>Salin</span>
+                                </button>
+                            </div>
+                            <pre id="prompt-1" class="p-5 text-xs font-mono text-slate-300 whitespace-pre-wrap leading-relaxed overflow-x-auto max-h-96">PERAN:
+Kamu adalah Asisten Eksekutif untuk [Nama Tim/Perusahaan]. Tugasmu adalah mengubah transkrip rapat atau dokumen panjang menjadi rangkuman yang padat, jelas, dan siap ditindaklanjuti.
+
+ATURAN KERJA:
+1. Gunakan Bahasa Indonesia yang lugas dan profesional.
+2. Jangan pernah mengarang fakta, angka, atau kesepakatan yang tidak tertulis di teks sumber.
+3. Jika tenggat waktu atau nama penanggung jawab tidak disebutkan di teks, tulis "Belum ditentukan".
+
+FORMAT OUTPUT:
+📌 Ringkasan Utama (Maksimal 3 kalimat)
+✅ Keputusan Penting (Poin-poin)
+📋 Daftar Tugas Tindak Lanjut:
+- [Nama Orang] : [Tugas Spesifik] (Tenggat: [Waktu])
+❓ Hal yang Masih Perlu Dikonfirmasi</pre>
+                        </div>
+                    </div>
+
+                    <!-- Prompt 2 -->
+                    <div class="bg-slate-950 rounded-2xl border border-slate-800 flex flex-col justify-between overflow-hidden">
+                        <div>
+                            <div class="px-5 py-4 bg-slate-900/90 border-b border-slate-800 flex items-center justify-between gap-2">
+                                <div>
+                                    <span class="text-xs font-mono text-emerald-400 block">Template #2</span>
+                                    <h3 class="font-bold text-white text-sm sm:text-base">Agent Penyortir & Draf Email</h3>
+                                </div>
+                                <button type="button" data-copy-target="prompt-2" class="copy-btn px-3 py-1.5 rounded-lg bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold transition-colors flex items-center gap-1.5 shrink-0 focus:outline-none focus:ring-2 focus:ring-brand-400">
+                                    <span>Salin</span>
+                                </button>
+                            </div>
+                            <pre id="prompt-2" class="p-5 text-xs font-mono text-slate-300 whitespace-pre-wrap leading-relaxed overflow-x-auto max-h-96">PERAN:
+Kamu adalah Asisten Komunikasi untuk [Nama Anda / Jabatan]. Tugasmu membaca pesan masuk dan menyiapkan konsep balasan (draf) yang ramah serta solutif.
+
+ATURAN KERJA:
+1. Klasifikasikan pesan ke dalam satu kategori: [PENTING-KLIEN / TAGIHAN / PERTANYAAN-UMUM / PROMOSI].
+2. Jika kategori adalah PROMOSI, cukup tulis "Tidak perlu dibalas".
+3. Jangan pernah menjanjikan harga diskon, kepastian tanggal, atau kesepakatan hukum tanpa persetujuan saya.
+4. Gunakan sapaan yang hangat namun tetap sopan.
+
+FORMAT OUTPUT:
+🏷️ Kategori: [Nama Kategori]
+⚡ Tingkat Urgensi: [Tinggi / Sedang / Rendah]
+📝 Inti Pesan Pengirim: [1 kalimat ringkas]
+✉️ Draf Balasan:
+[Tulis draf balasan maksimal 3 paragraf singkat di sini]</pre>
+                        </div>
+                    </div>
+
+                    <!-- Prompt 3 -->
+                    <div class="bg-slate-950 rounded-2xl border border-slate-800 flex flex-col justify-between overflow-hidden">
+                        <div>
+                            <div class="px-5 py-4 bg-slate-900/90 border-b border-slate-800 flex items-center justify-between gap-2">
+                                <div>
+                                    <span class="text-xs font-mono text-emerald-400 block">Template #3</span>
+                                    <h3 class="font-bold text-white text-sm sm:text-base">Agent Riset & Pengecek Fakta</h3>
+                                </div>
+                                <button type="button" data-copy-target="prompt-3" class="copy-btn px-3 py-1.5 rounded-lg bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold transition-colors flex items-center gap-1.5 shrink-0 focus:outline-none focus:ring-2 focus:ring-brand-400">
+                                    <span>Salin</span>
+                                </button>
+                            </div>
+                            <pre id="prompt-3" class="p-5 text-xs font-mono text-slate-300 whitespace-pre-wrap leading-relaxed overflow-x-auto max-h-96">PERAN:
+Kamu adalah Analis Riset bidang [Sebutkan Industri/Topik, misal: UMKM Kuliner / Edukasi]. Tugasmu mengumpulkan dan menyarikan informasi dari bahan atau hasil pencarian web yang diberikan.
+
+ATURAN KERJA:
+1. Pisahkan dengan tegas antara FAKTA (ada datanya di sumber) dan OPINI.
+2. Wajib mencantumkan sumber atau tautan asli di setiap poin temuan.
+3. Jika informasi yang diminta tidak ditemukan dari sumber yang tersedia, katakan secara jujur "Data tidak ditemukan pada sumber", jangan menebak.
+
+FORMAT OUTPUT:
+🎯 Topik Riset: [Judul Topik]
+💡 3-5 Temuan Utama:
+- [Temuan 1 + Sumber]
+- [Temuan 2 + Sumber]
+🚀 Rekomendasi Praktis untuk Pekerjaan Kita:
+[1-2 ide langkah nyata yang bisa diambil dari temuan di atas]</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. STACK & TOOLS PERBANDINGAN -->
+        <section id="tools" class="py-16 sm:py-24 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-3xl mx-auto text-center mb-14">
+                <span class="text-brand-600 dark:text-brand-400 font-bold text-sm uppercase tracking-wider">Bab 5 • Memilih Peralatan</span>
+                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mt-2 mb-4">Perbandingan Jalur: No-Code vs Low-Code vs Coding</h2>
+                <p class="text-slate-600 dark:text-slate-300">
+                    Kamu tidak perlu menjadi programmer untuk membuat AI Agent yang berguna. Pilih jalur yang paling sesuai dengan kenyamananmu saat ini.
+                </p>
+            </div>
+
+            <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm bg-white dark:bg-slate-900">
+                <table class="w-full text-left border-collapse text-sm">
+                    <thead>
+                        <tr class="bg-slate-100/80 dark:bg-slate-800/80 text-slate-900 dark:text-white border-b border-slate-200 dark:border-slate-800">
+                            <th class="p-4 sm:p-5 font-bold">Kategori Jalur</th>
+                            <th class="p-4 sm:p-5 font-bold">Contoh Tools Populer</th>
+                            <th class="p-4 sm:p-5 font-bold">Kelebihan Utama</th>
+                            <th class="p-4 sm:p-5 font-bold">Kekurangan</th>
+                            <th class="p-4 sm:p-5 font-bold">Paling Cocok Untuk</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+                        <!-- Row 1: No-Code -->
+                        <tr class="hover:bg-slate-50/60 dark:hover:bg-slate-800/30">
+                            <td class="p-4 sm:p-5 align-top">
+                                <span class="inline-block px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 mb-1">1. No-Code (Tanpa Kode)</span>
+                                <div class="text-xs text-slate-500 dark:text-slate-400 mt-1">Tinggal ketik instruksi & klik</div>
+                            </td>
+                            <td class="p-4 sm:p-5 align-top font-medium text-slate-800 dark:text-slate-200">
+                                Gemini Gems, Custom GPTs, Claude Projects, Zapier Central, Make (Template Dasar)
+                            </td>
+                            <td class="p-4 sm:p-5 align-top text-slate-600 dark:text-slate-300">
+                                Sangat ramah pemula, bisa selesai dalam 15–30 menit pertama tanpa instal aplikasi rumit.
+                            </td>
+                            <td class="p-4 sm:p-5 align-top text-slate-600 dark:text-slate-300">
+                                Kustomisasi alur bercabang agak terbatas; biaya langganan bisa naik jika tugasnya ribuan kali sehari.
+                            </td>
+                            <td class="p-4 sm:p-5 align-top font-medium text-slate-800 dark:text-slate-200">
+                                Pemula murni, pekerja kantoran, admin, pemilik UMKM, kreator konten.
+                            </td>
+                        </tr>
+                        <!-- Row 2: Low-Code -->
+                        <tr class="hover:bg-slate-50/60 dark:hover:bg-slate-800/30">
+                            <td class="p-4 sm:p-5 align-top">
+                                <span class="inline-block px-2.5 py-1 rounded-full text-xs font-bold bg-brand-100 dark:bg-brand-950 text-brand-800 dark:text-brand-300 mb-1">2. Low-Code (Visual + Logika)</span>
+                                <div class="text-xs text-slate-500 dark:text-slate-400 mt-1">Merangkai blok diagram</div>
+                            </td>
+                            <td class="p-4 sm:p-5 align-top font-medium text-slate-800 dark:text-slate-200">
+                                n8n, Flowise, Dify, Make (Skenario Lanjutan)
+                            </td>
+                            <td class="p-4 sm:p-5 align-top text-slate-600 dark:text-slate-300">
+                                Sangat fleksibel, bisa menghubungkan ratusan aplikasi, mendukung alur logika bercabang dan memori.
+                            </td>
+                            <td class="p-4 sm:p-5 align-top text-slate-600 dark:text-slate-300">
+                                Butuh waktu belajar memahami struktur data dasar seperti <strong>JSON</strong> <em>(format teks terstruktur rapi untuk pertukaran data antar-aplikasi)</em>.
+                            </td>
+                            <td class="p-4 sm:p-5 align-top font-medium text-slate-800 dark:text-slate-200">
+                                Pengguna yang sudah mencoba No-Code dan ingin membuat alur kerja otomatis yang lebih canggih.
+                            </td>
+                        </tr>
+                        <!-- Row 3: Full Coding -->
+                        <tr class="hover:bg-slate-50/60 dark:hover:bg-slate-800/30">
+                            <td class="p-4 sm:p-5 align-top">
+                                <span class="inline-block px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 mb-1">3. Full Coding</span>
+                                <div class="text-xs text-slate-500 dark:text-slate-400 mt-1">Menulis kode pemrograman</div>
+                            </td>
+                            <td class="p-4 sm:p-5 align-top font-medium text-slate-800 dark:text-slate-200">
+                                Python / JavaScript dengan kerangka kerja seperti LangGraph, CrewAI, Google ADK, atau SDK resmi
+                            </td>
+                            <td class="p-4 sm:p-5 align-top text-slate-600 dark:text-slate-300">
+                                Kendali penuh 100%, paling hemat biaya untuk skala besar, bisa diintegrasikan ke produk software sendiri.
+                            </td>
+                            <td class="p-4 sm:p-5 align-top text-slate-600 dark:text-slate-300">
+                                Wajib mengerti pemrograman, pengelolaan server, serta perbaikan bug mandiri.
+                            </td>
+                            <td class="p-4 sm:p-5 align-top font-medium text-slate-800 dark:text-slate-200">
+                                Software engineer, tim teknis, atau produk teknologi komersial.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 7. TIPS EFISIENSI & KEAMANAN -->
+        <section id="keamanan" class="py-16 sm:py-24 bg-slate-100/80 dark:bg-slate-900/50 border-y border-slate-200 dark:border-slate-800">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="max-w-3xl mx-auto text-center mb-14">
+                    <span class="text-brand-600 dark:text-brand-400 font-bold text-sm uppercase tracking-wider">Bab 6 • Prinsip Aman & Hemat</span>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mt-2 mb-4">4 Aturan Emas Keamanan & Efisiensi AI Agent</h2>
+                    <p class="text-slate-600 dark:text-slate-300">
+                        Agar asisten AI-mu benar-benar membantu dan tidak menimbulkan masalah baru, terapkan empat kebiasaan penting ini sejak hari pertama.
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Tip 1 -->
+                    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 flex gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center text-2xl shrink-0">🔒</div>
+                        <div>
+                            <h3 class="font-bold text-slate-900 dark:text-white text-lg mb-1">1. Batasi Akses Agent Seperlunya</h3>
+                            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                                Jangan berikan akses ke seluruh folder Google Drive utama jika agent hanya butuh membaca 1 folder khusus. Buat folder terpisah untuk kerja agent dan hindari memberi izin hapus otomatis (Delete).
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Tip 2 -->
+                    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 flex gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center text-2xl shrink-0">🔑</div>
+                        <div>
+                            <h3 class="font-bold text-slate-900 dark:text-white text-lg mb-1">2. Jangan Taruh API Key di Halaman Publik (Frontend)</h3>
+                            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                                API Key ibarat kartu ATM untuk kuota AI-mu. Jangan pernah menempelkan API Key langsung di dalam kode website publik (Frontend) atau membagikannya di grup/screenshot, karena orang lain bisa menyedot kuotamu. Simpan hanya di menu <em>Credentials/Secret</em> pada platform otomatisasimu.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Tip 3 -->
+                    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 flex gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-brand-500/10 text-brand-600 dark:text-brand-400 flex items-center justify-center text-2xl shrink-0">👀</div>
+                        <div>
+                            <h3 class="font-bold text-slate-900 dark:text-white text-lg mb-1">3. Selalu Review Sebelum Aksi Penting (Human-in-the-Loop)</h3>
+                            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                                Untuk urusan krusial seperti mengirim email ke klien penting, mempublikasikan artikel resmi, atau menyetujui transaksi, atur agar agent hanya membuat <strong>Draf</strong> atau meminta persetujuanmu dulu di Telegram/Slack sebelum dikirim.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Tip 4 -->
+                    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 flex gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-2xl shrink-0">⏱️</div>
+                        <div>
+                            <h3 class="font-bold text-slate-900 dark:text-white text-lg mb-1">4. Ukur Waktu yang Benar-Benar Dihemat</h3>
+                            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                                Bandingkan waktu kerja manual sebelum vs sesudah memakai agent. Jika sebuah tugas awalnya memakan 30 menit sehari dan kini tinggal 3 menit memeriksa draf, berarti kamu baru saja menghemat lebih dari 2 jam kerja setiap minggu!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. FAQ PEMULA -->
+        <section id="faq" class="py-16 sm:py-24 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <span class="text-brand-600 dark:text-brand-400 font-bold text-sm uppercase tracking-wider">Bab 7 • Tanya Jawab</span>
+                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mt-2 mb-4">Pertanyaan yang Sering Diajukan Pemula (FAQ)</h2>
+                <p class="text-slate-600 dark:text-slate-300">
+                    Masih ragu untuk memulai? Berikut jawaban jujur untuk pertanyaan yang paling sering muncul.
+                </p>
+            </div>
+
+            <div class="space-y-3" id="faq-accordion">
+                <!-- FAQ 1 -->
+                <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+                    <button type="button" class="accordion-btn w-full px-6 py-4 text-left font-bold text-slate-900 dark:text-white flex items-center justify-between gap-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 focus:outline-none" aria-expanded="false">
+                        <span>1. Apakah saya benar-benar bisa membuat AI Agent tanpa bisa coding sama sekali?</span>
+                        <svg class="accordion-icon w-5 h-5 text-slate-400 transition-transform duration-200 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content hidden px-6 pb-5 text-sm text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-slate-800 pt-3">
+                        Ya, sangat bisa. Saat ini kemahiran terpenting untuk memulai bukanlah bahasa pemrograman, melainkan kemampuan menyusun instruksi kerja yang jelas dan logis dalam bahasa manusia (System Prompt) serta menghubungkan aplikasi lewat platform visual (No-Code).
+                    </div>
+                </div>
+
+                <!-- FAQ 2 -->
+                <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+                    <button type="button" class="accordion-btn w-full px-6 py-4 text-left font-bold text-slate-900 dark:text-white flex items-center justify-between gap-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 focus:outline-none" aria-expanded="false">
+                        <span>2. Apakah membuat dan menjalankan AI Agent itu gratis atau berbayar?</span>
+                        <svg class="accordion-icon w-5 h-5 text-slate-400 transition-transform duration-200 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content hidden px-6 pb-5 text-sm text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-slate-800 pt-3">
+                        Kamu bisa mulai belajar secara <strong>gratis</strong>. Banyak penyedia model AI dan platform otomatisasi menyediakan kuota percobaan gratis (free tier) atau opsi instalasi mandiri (self-hosted seperti di n8n). Jika nantinya kebutuhanmu sudah rutin ratusan tugas per bulan, barulah kamu bisa mempertimbangkan paket berbayar sesuai pemakaian.
+                    </div>
+                </div>
+
+                <!-- FAQ 3 -->
+                <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+                    <button type="button" class="accordion-btn w-full px-6 py-4 text-left font-bold text-slate-900 dark:text-white flex items-center justify-between gap-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 focus:outline-none" aria-expanded="false">
+                        <span>3. Bagaimana kalau AI Agent saya salah menjawab atau mengarang informasi?</span>
+                        <svg class="accordion-icon w-5 h-5 text-slate-400 transition-transform duration-200 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content hidden px-6 pb-5 text-sm text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-slate-800 pt-3">
+                        Itulah sebabnya di awal kita selalu menerapkan sistem <strong>Draf / Review Manusia</strong>. Selain itu, kamu bisa menekan risiko AI mengarang bebas dengan menuliskan aturan tegas di System Prompt ("Jika tidak tertulis di dokumen referensi, katakan tidak tahu") dan memberinya file panduan resmi.
+                    </div>
+                </div>
+
+                <!-- FAQ 4 -->
+                <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+                    <button type="button" class="accordion-btn w-full px-6 py-4 text-left font-bold text-slate-900 dark:text-white flex items-center justify-between gap-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 focus:outline-none" aria-expanded="false">
+                        <span>4. Apakah data dokumen kerja saya aman jika dihubungkan ke AI Agent?</span>
+                        <svg class="accordion-icon w-5 h-5 text-slate-400 transition-transform duration-200 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content hidden px-6 pb-5 text-sm text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-slate-800 pt-3">
+                        Keamanan bergantung pada pengaturan layanan yang kamu gunakan dan kehati-hatianmu. Sebagai prinsip dasar untuk pemula: jangan masukkan data rahasia yang sensitif (seperti password, nomor kartu identitas pribadi pelanggan, atau rahasia finansial perusahaan) ke dalam percobaan publik tanpa izin tim IT tempatmu bekerja.
+                    </div>
+                </div>
+
+                <!-- FAQ 5 -->
+                <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+                    <button type="button" class="accordion-btn w-full px-6 py-4 text-left font-bold text-slate-900 dark:text-white flex items-center justify-between gap-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 focus:outline-none" aria-expanded="false">
+                        <span>5. Berapa lama waktu yang dibutuhkan pemula untuk membuat agent pertamanya?</span>
+                        <svg class="accordion-icon w-5 h-5 text-slate-400 transition-transform duration-200 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content hidden px-6 pb-5 text-sm text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-slate-800 pt-3">
+                        Untuk asisten berbasis instruksi dan dokumen (seperti perangkum rapat atau pembuat draf email menggunakan template di halaman ini), kamu bisa menyelesaikannya dalam <strong>30 hingga 60 menit</strong>. Untuk alur kerja otomatis antar-aplikasi di Make atau n8n, biasanya butuh sekitar 1 akhir pekan untuk mencoba-coba hingga lancar.
+                    </div>
+                </div>
+
+                <!-- FAQ 6 -->
+                <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+                    <button type="button" class="accordion-btn w-full px-6 py-4 text-left font-bold text-slate-900 dark:text-white flex items-center justify-between gap-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 focus:outline-none" aria-expanded="false">
+                        <span>6. Apakah laptop saya harus menyala terus agar AI Agent bekerja?</span>
+                        <svg class="accordion-icon w-5 h-5 text-slate-400 transition-transform duration-200 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content hidden px-6 pb-5 text-sm text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-slate-800 pt-3">
+                        Tidak perlu, jika kamu menggunakan platform berbasis awan (Cloud) seperti Make, Zapier, atau n8n Cloud. Setelah alur kerjamu diaktifkan (Deploy), ia akan tetap berjalan di server mereka meskipun laptopmu dimatikan.
+                    </div>
+                </div>
+
+                <!-- FAQ 7 -->
+                <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+                    <button type="button" class="accordion-btn w-full px-6 py-4 text-left font-bold text-slate-900 dark:text-white flex items-center justify-between gap-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 focus:outline-none" aria-expanded="false">
+                        <span>7. Lebih baik membuat satu AI Agent besar atau beberapa Agent kecil?</span>
+                        <svg class="accordion-icon w-5 h-5 text-slate-400 transition-transform duration-200 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="accordion-content hidden px-6 pb-5 text-sm text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-slate-800 pt-3">
+                        Jauh lebih baik membuat <strong>beberapa Agent kecil yang spesialis</strong>. Misalnya satu agent khusus merangkum rapat, dan satu agent lain khusus menyortir email. Agent spesialis jauh lebih akurat, mudah diperbaiki kalau ada salah, dan tidak gampang bingung.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 9. PENUTUP & LANGKAH SELANJUTNYA -->
+        <section class="py-16 sm:py-24 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-4xl mx-auto rounded-3xl bg-gradient-to-br from-brand-600 via-brand-700 to-slate-900 text-white p-8 sm:p-12 shadow-xl">
+                <div class="max-w-2xl">
+                    <span class="inline-block px-3 py-1 rounded-full bg-white/15 text-xs font-semibold uppercase tracking-wider mb-4">Langkah Pertamamu Hari Ini</span>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold mb-4 leading-tight">Jangan Tunggu Paham Semuanya Baru Mulai</h2>
+                    <p class="text-brand-100 mb-8 leading-relaxed text-sm sm:text-base">
+                        Cara tercepat memahami AI Agent adalah dengan melihatnya menyelesaikan <strong>satu pekerjaan nyatamu</strong> hari ini. Kamu hanya butuh waktu 15 menit untuk langkah pertama:
+                    </p>
+
+                    <ol class="space-y-3 mb-8 text-sm sm:text-base text-brand-50">
+                        <li class="flex items-start gap-3">
+                            <span class="w-6 h-6 rounded-full bg-emerald-400 text-slate-950 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">1</span>
+                            <span>Pilih <strong>Template #1 (Perangkum Rapat)</strong> atau <strong>Template #2 (Draf Email)</strong> di atas.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="w-6 h-6 rounded-full bg-emerald-400 text-slate-950 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">2</span>
+                            <span>Pasang ke fitur asisten kustom di AI favoritmu atau skenario pertamamu di n8n/Make.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="w-6 h-6 rounded-full bg-emerald-400 text-slate-950 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">3</span>
+                            <span>Uji dengan 1 dokumen atau email asli dari pekerjaanmu hari ini, lalu centang progresmu di Roadmap!</span>
+                        </li>
+                    </ol>
+
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="#roadmap" class="px-7 py-3.5 rounded-xl bg-white text-brand-700 hover:bg-brand-50 font-bold text-center shadow-md transition-all">
+                            Kembali ke Checklist Langkah 1 ↑
+                        </a>
+                        <a href="#template" class="px-7 py-3.5 rounded-xl bg-brand-800/80 hover:bg-brand-800 text-white font-semibold border border-brand-400/30 text-center transition-all">
+                            Ambil Template System Prompt
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 dark:border-slate-800 py-10 text-center text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p>© 2026 <strong>[Nama Brand / Komunitas Edukasi Anda]</strong>. Dibuat untuk memberdayakan pekerja Indonesia dengan AI praktis.</p>
+            <p class="text-xs">Konten bebas klaim berlebihan • Fokus pada produktivitas nyata.</p>
+        </div>
+    </footer>
+
+    <!-- Toast Notification for Copy & Reset -->
+    <div id="toast" role="status" aria-live="polite" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 pointer-events-none transition-all duration-300 bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-4 py-3 rounded-xl shadow-lg text-sm font-semibold flex items-center gap-2">
+        <span id="toast-msg">Berhasil disalin!</span>
+    </div>
+
+    <script>
+        (function () {
+            const STORAGE_KEY = 'kelas_agent_progress_v1';
+
+            // 1. Mobile Menu Toggle
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    const isHidden = mobileMenu.classList.toggle('hidden');
+                    mobileMenuBtn.setAttribute('aria-expanded', String(!isHidden));
+                });
+                mobileMenu.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.add('hidden');
+                        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                    });
+                });
+            }
+
+            // 2. Reading Progress Bar on Scroll
+            const readingProgress = document.getElementById('reading-progress');
+            window.addEventListener('scroll', () => {
+                if (!readingProgress) return;
+                const scrollTop = window.scrollY;
+                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const pct = docHeight > 0 ? Math.min(100, Math.max(0, (scrollTop / docHeight) * 100)) : 0;
+                readingProgress.style.width = pct + '%';
+            }, { passive: true });
+
+            // 3. Toast Helper (No browser alert)
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-msg');
+            let toastTimer = null;
+            function showToast(message) {
+                if (!toast || !toastMsg) return;
+                toastMsg.textContent = message;
+                toast.classList.remove('translate-y-20', 'opacity-0');
+                clearTimeout(toastTimer);
+                toastTimer = setTimeout(() => {
+                    toast.classList.add('translate-y-20', 'opacity-0');
+                }, 2600);
+            }
+
+            // 4. Accordion Logic (Roadmap & FAQ)
+            const accordionBtns = document.querySelectorAll('.accordion-btn');
+            accordionBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const content = btn.nextElementSibling;
+                    const icon = btn.querySelector('.accordion-icon');
+                    const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+
+                    btn.setAttribute('aria-expanded', String(!isExpanded));
+                    if (content) content.classList.toggle('hidden', isExpanded);
+                    if (icon) icon.classList.toggle('rotate-180', !isExpanded);
+                });
+            });
+
+            // Expand / Collapse All Roadmap Steps
+            const expandAllBtn = document.getElementById('expand-all-btn');
+            const collapseAllBtn = document.getElementById('collapse-all-btn');
+            const roadmapContainer = document.getElementById('roadmap-accordion');
+
+            if (expandAllBtn && roadmapContainer) {
+                expandAllBtn.addEventListener('click', () => {
+                    roadmapContainer.querySelectorAll('.accordion-btn').forEach(btn => {
+                        btn.setAttribute('aria-expanded', 'true');
+                        if (btn.nextElementSibling) btn.nextElementSibling.classList.remove('hidden');
+                        const icon = btn.querySelector('.accordion-icon');
+                        if (icon) icon.classList.add('rotate-180');
+                    });
+                });
+            }
+            if (collapseAllBtn && roadmapContainer) {
+                collapseAllBtn.addEventListener('click', () => {
+                    roadmapContainer.querySelectorAll('.accordion-btn').forEach(btn => {
+                        btn.setAttribute('aria-expanded', 'false');
+                        if (btn.nextElementSibling) btn.nextElementSibling.classList.add('hidden');
+                        const icon = btn.querySelector('.accordion-icon');
+                        if (icon) icon.classList.remove('rotate-180');
+                    });
+                });
+            }
+
+            // 5. Checklist Progress with Safe try/catch Persistence
+            const checkboxes = document.querySelectorAll('.step-check');
+            const progressBar = document.getElementById('roadmap-progress-bar');
+            const progressPctText = document.getElementById('roadmap-progress-pct');
+            const navProgressText = document.getElementById('nav-progress-text');
+            const resetBtn = document.getElementById('reset-progress-btn');
+
+            function loadSavedState() {
+                try {
+                    const raw = window.localStorage.getItem(STORAGE_KEY);
+                    return raw ? JSON.parse(raw) : {};
+                } catch (err) {
+                    return {};
+                }
+            }
+
+            function saveState(stateObj) {
+                try {
+                    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(stateObj));
+                } catch (err) {
+                    // Fallback gracefully if storage is restricted in private/iframe mode
+                }
+            }
+
+            let checklistState = loadSavedState();
+
+            function updateProgressUI() {
+                const total = checkboxes.length;
+                let completed = 0;
+                checkboxes.forEach(cb => {
+                    if (cb.checked) completed++;
+                });
+                const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
+                if (progressBar) progressBar.style.width = pct + '%';
+                if (progressPctText) progressPctText.textContent = `${pct}% Selesai (${completed}/${total} tugas)`;
+                if (navProgressText) navProgressText.textContent = `${completed}/${total}`;
+            }
+
+            checkboxes.forEach(cb => {
+                const id = cb.getAttribute('data-check-id');
+                if (id && checklistState[id]) {
+                    cb.checked = true;
+                }
+                cb.addEventListener('change', () => {
+                    if (id) {
+                        checklistState[id] = cb.checked;
+                        saveState(checklistState);
+                    }
+                    updateProgressUI();
+                });
+            });
+
+            if (resetBtn) {
+                resetBtn.addEventListener('click', () => {
+                    checklistState = {};
+                    saveState(checklistState);
+                    checkboxes.forEach(cb => { cb.checked = false; });
+                    updateProgressUI();
+                    showToast('🔄 Progres checklist berhasil direset');
+                });
+            }
+
+            updateProgressUI();
+
+            // 6. Copy Prompt Button with Clipboard Fallback
+            const copyBtns = document.querySelectorAll('.copy-btn');
+            copyBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const targetId = btn.getAttribute('data-copy-target');
+                    const preEl = document.getElementById(targetId);
+                    if (!preEl) return;
+
+                    const textToCopy = preEl.textContent;
+                    const originalText = btn.innerHTML;
+
+                    function onCopySuccess() {
+                        btn.innerHTML = '<span>✓ Tersalin</span>';
+                        btn.classList.replace('bg-brand-600', 'bg-emerald-600');
+                        showToast('✅ System Prompt berhasil disalin ke clipboard!');
+                        setTimeout(() => {
+                            btn.innerHTML = originalText;
+                            btn.classList.replace('bg-emerald-600', 'bg-brand-600');
+                        }, 2000);
+                    }
+
+                    // Fallback-first approach for universal iframe & browser compatibility
+                    try {
+                        const textArea = document.createElement('textarea');
+                        textArea.value = textToCopy;
+                        textArea.style.position = 'fixed';
+                        textArea.style.opacity = '0';
+                        document.body.appendChild(textArea);
+                        textArea.focus();
+                        textArea.select();
+                        const successful = document.execCommand('copy');
+                        document.body.removeChild(textArea);
+                        if (successful) {
+                            onCopySuccess();
+                            return;
+                        }
+                    } catch (e) {
+                        // Continue to navigator.clipboard if available
+                    }
+
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(textToCopy).then(onCopySuccess).catch(() => {
+                            showToast('⚠️ Gagal menyalin otomatis, silakan blok dan salin manual.');
+                        });
+                    }
+                });
+            });
+        })();
+    </script>
+</body>
+</html>
 <!doctype html>
 <html lang="id">
 <head>
