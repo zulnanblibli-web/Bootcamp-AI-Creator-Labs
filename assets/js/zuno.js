@@ -145,7 +145,7 @@
       }, 0.5);
     });
 
-    document.querySelectorAll(".zweeks, .ztrack, .zmem, .znext, .znever, .zchips, .zrank").forEach(function (group) {
+    document.querySelectorAll(".zweeks, .ztrack, .zmem, .znext, .znever, .zchips, .zrank, .zfields").forEach(function (group) {
       var kids = Array.prototype.slice.call(group.querySelectorAll(":scope > i, :scope > li"));
       kids.forEach(function (k) { k.style.opacity = "0"; });
       onceInView(M, group, function () {
