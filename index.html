@@ -3,36 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panduan Praktis: Bangun AI Agent Pertamamu dari Nol</title>
-    <meta name="description" content="Panduan lengkap bahasa Indonesia untuk pemula non-teknis membangun AI Agent guna otomatisasi kerja dan produktivitas tanpa harus jago coding.">
+    <title>Zuno · Tim Agent AI yang Ngonten dari Nol Ide Sampai Iklan</title>
+    <meta name="description" content="Zuno, tim agent AI yang ngonten dari nol ide sampai iklan. Blueprint lengkap, panduan membangun AI Agent untuk pemula, dan radar tools AI agent dari Apify.">
+    <meta name="theme-color" content="#D4F3E9">
+    <link rel="icon" href="assets/img/zuno-mark.png" type="image/png">
     
-    <!-- Google Fonts: Plus Jakarta Sans untuk UI & JetBrains Mono untuk Prompt -->
+    <!-- Google Fonts: Bricolage Grotesque untuk judul, Plus Jakarta Sans untuk UI & JetBrains Mono untuk Prompt -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
     <script>
         tailwind.config = {
-            darkMode: 'media',
+            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: {
                         sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        display: ['"Bricolage Grotesque"', '"Plus Jakarta Sans"', 'sans-serif'],
                         mono: ['"JetBrains Mono"', 'monospace'],
                     },
                     colors: {
+                        // Palet Zuno: teal (brand), cyan lensa (emerald), oranye petir (accent)
                         brand: {
-                            50: '#eef2ff',
-                            100: '#e0e7ff',
-                            500: '#6366f1',
-                            600: '#4f46e5',
-                            700: '#4338ca',
+                            50: '#ECF8F5', 100: '#D4F0E8', 200: '#A9E0D3', 300: '#73C8B8', 400: '#3EA79C',
+                            500: '#22827E', 600: '#1B5E63', 700: '#164D52', 800: '#123F43', 900: '#0F3438', 950: '#0A2427',
+                        },
+                        emerald: {
+                            50: '#E6FAFD', 100: '#C6F2F9', 200: '#93E5F2', 300: '#5AD3E8', 400: '#22C3DD',
+                            500: '#13A6C0', 600: '#0E879E', 700: '#0E6C80', 800: '#105868', 900: '#114A57', 950: '#07303A',
                         },
                         accent: {
-                            500: '#10b981',
-                            600: '#059669',
+                            500: '#F07A2A',
+                            600: '#C85A12',
                         }
                     }
                 }
@@ -57,18 +62,144 @@
             background: rgba(156, 163, 175, 0.7);
         }
         .glossary-term {
-            border-bottom: 1.5px dashed #6366f1;
+            border-bottom: 1.5px dashed #1B5E63;
             cursor: help;
         }
         .bg-grid-pattern {
             background-size: 32px 32px;
             background-image: 
-                linear-gradient(to right, rgba(99, 102, 241, 0.06) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(99, 102, 241, 0.06) 1px, transparent 1px);
+                linear-gradient(to right, rgba(27, 94, 99, 0.07) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(27, 94, 99, 0.07) 1px, transparent 1px);
         }
     </style>
+    <!-- Radar Apify: gaya asli, diberi awalan #radar supaya tidak bocor ke bagian lain -->
+    <style>
+  :root {
+    --bg: #F5FBF9;
+    --surface: #ffffff;
+    --ink: #0F2E33;
+    --muted: #4B6468;
+    --line: #D5E7E2;
+    --accent: #1B5E63;
+    --accent-soft: rgba(27, 94, 99, .12);
+    --warm: #C85A12;
+    --focus: #F07A2A;
+    --c1: #1B5E63;
+    --c2: #F07A2A;
+    --c3: #13A6C0;
+    --c4: #E0A800;
+    --c5: #7A9A98;
+    --font-display: "Bricolage Grotesque", "Plus Jakarta Sans", system-ui, sans-serif;
+    --font-body: "Plus Jakarta Sans", system-ui, sans-serif;
+  }
+  #radar * { box-sizing: border-box; }
+  #radar { -webkit-text-size-adjust: 100%; }
+  #radar {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.55;
+  }
+  #radar a { color: var(--accent); text-underline-offset: 3px; }
+  #radar :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 4px; }
+  #radar .wrap { max-width: 1120px; margin: 0 auto; padding: 40px 16px 72px; }
+  @media (min-width: 720px) {
+  #radar .wrap { padding: 56px 32px 96px; } }
+  #radar header { max-width: 720px; }
+  #radar h1 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2rem, 5.5vw, 3.4rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin: 0 0 20px;
+  }
+  #radar .ringkasan { font-size: clamp(1.05rem, 2.4vw, 1.3rem); line-height: 1.5; margin: 0 0 8px; max-width: 46ch; }
+  #radar .ringkasan strong { font-weight: 600; }
+  #radar .ringkasan .baru { color: var(--warm); font-family: var(--font-display); font-weight: 700; }
+  #radar .meta { color: var(--muted); font-size: .9rem; margin: 0; }
+  #radar .meta .basi { color: var(--warm); font-weight: 600; }
+  #radar .panel { border-top: 1px solid var(--line); padding-top: 20px; margin-top: 40px; }
+  #radar .panel h2 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 1.25rem;
+    letter-spacing: -0.01em;
+    margin: 0 0 4px;
+  }
+  #radar .panel .catatan { color: var(--muted); font-size: .9rem; margin: 0 0 16px; max-width: 62ch; }
+  #radar .chart-box { position: relative; width: 100%; }
+  #radar .chart-box.tren { height: 300px; }
+  #radar .chart-box.donut { height: 300px; }
+  #radar .chart-box.bar { height: 380px; }
+  #radar .dua-kolom { display: grid; gap: 0 48px; grid-template-columns: 1fr; }
+  @media (min-width: 900px) {
+  #radar .dua-kolom { grid-template-columns: 1.35fr 1fr; } }
+  #radar .kosong { color: var(--muted); padding: 32px 0; margin: 0; }
+  #radar /* Tabel */
+  .alat { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 12px; }
+  #radar .alat label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  #radar .alat input[type="search"], #radar .alat select {
+    font: inherit;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 9px 12px;
+    min-height: 44px;
+  }
+  #radar .alat input[type="search"] { flex: 1 1 240px; max-width: 420px; }
+  #radar .alat .jumlah { color: var(--muted); font-size: .9rem; margin-left: auto; }
+  #radar .tabel-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); }
+  #radar table { width: 100%; border-collapse: collapse; min-width: 640px; font-size: .95rem; }
+  #radar th, #radar td { text-align: left; padding: 12px 14px; vertical-align: top; border-bottom: 1px solid var(--line); }
+  #radar tbody tr:last-child td { border-bottom: 0; }
+  #radar th { font-weight: 600; white-space: nowrap; background: var(--surface); position: sticky; top: 0; }
+  #radar th button {
+    font: inherit; font-weight: 600; color: inherit; background: none; border: 0; padding: 4px 0; cursor: pointer;
+    display: inline-flex; gap: 6px; align-items: center; min-height: 32px;
+  }
+  #radar th button .panah { color: var(--muted); font-size: .8em; width: 1em; text-align: center; }
+  #radar th[aria-sort="ascending"] .panah, #radar th[aria-sort="descending"] .panah { color: var(--accent); }
+  #radar td.angka, #radar th.angka { text-align: right; }
+  #radar th.angka button { flex-direction: row-reverse; }
+  #radar td .nama { font-weight: 600; }
+  #radar td .oleh { color: var(--muted); font-size: .85rem; }
+  #radar td .desk { color: var(--muted); font-size: .88rem; margin-top: 4px; max-width: 52ch; }
+  #radar td.tgl { white-space: nowrap; }
+  #radar .lencana-baru { display: inline-block; margin-left: 8px; padding: 1px 8px; border-radius: 999px; font-size: .75rem; font-weight: 600; color: var(--warm); border: 1px solid var(--warm); vertical-align: 1px; }
+
+  @media (max-width: 720px) {
+  #radar .kol-kategori, #radar .kol-diubah { display: none; }
+  #radar table { min-width: 560px; }
+  #radar tbody td:first-child { min-width: 200px; }
+  }
+  #radar /* Pesan status */
+  .status { border: 1px solid var(--line); border-left: 4px solid var(--warm); background: var(--surface); padding: 16px 18px; border-radius: 6px; max-width: 68ch; margin-top: 32px; }
+  #radar .status h2 { font-family: var(--font-display); font-size: 1.1rem; margin: 0 0 6px; }
+  #radar .status p { margin: 0 0 6px; }
+  #radar .status p:last-child { margin: 0; }
+  #radar .status code { background: var(--accent-soft); padding: 1px 6px; border-radius: 4px; font-size: .9em; }
+  #radar footer { margin-top: 56px; color: var(--muted); font-size: .85rem; max-width: 68ch; }
+  #radar .skeleton { color: var(--muted); }
+  @media (prefers-reduced-motion: reduce) {
+  #radar * { scroll-behavior: auto !important; } }
+
+    </style>
+    <link rel="stylesheet" href="assets/css/zuno.css">
+    <script>
+        /* Siapkan state animasi sedini mungkin; kalau skrip animasi gagal dalam 3 detik, semua tetap tampil. */
+        (function () {
+            var r = document.documentElement;
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            r.classList.add('zjs');
+            setTimeout(function () { if (r.getAttribute('data-zanim') !== 'ok') r.classList.remove('zjs'); }, 3000);
+        })();
+    </script>
 </head>
-<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 antialiased selection:bg-brand-500 selection:text-white transition-colors duration-200">
+<body class="zbody-root antialiased">
 
     <!-- Top Progress Bar -->
     <div class="fixed top-0 left-0 right-0 z-50 h-1 bg-slate-200 dark:bg-slate-800">
@@ -76,21 +207,23 @@
     </div>
 
     <!-- Sticky Navigation -->
-    <header class="sticky top-0 z-40 backdrop-blur-md bg-white/85 dark:bg-slate-900/85 border-b border-slate-200/80 dark:border-slate-800/80">
+    <header class="sticky top-0 z-40 backdrop-blur-md bg-[#F5FBF9]/85 border-b border-[#0F2E33]/10 dark:border-slate-800/80">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <a href="#" class="flex items-center gap-2.5 font-extrabold text-lg tracking-tight text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500 rounded-lg p-1">
-                <span class="w-8 h-8 rounded-lg bg-brand-600 text-white flex items-center justify-center font-mono text-sm shadow-sm shadow-brand-500/30">AI</span>
-                <span> Kelas<span class="text-brand-600 dark:text-brand-400">Agent</span> <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">[Nama Brand]</span></span>
+            <a href="#beranda" class="znav-brand focus:outline-none rounded-xl p-1" aria-label="Zuno, kembali ke atas">
+                <img src="assets/img/zuno-mark.png" width="192" height="192" alt="">
+                <span><b>Zuno</b><small>AI Creator Labs</small></span>
             </a>
 
             <!-- Desktop Nav -->
-            <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600 dark:text-slate-300" aria-label="Navigasi Utama">
-                <a href="#konsep" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Konsep</a>
-                <a href="#use-case" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Contoh Nyata</a>
-                <a href="#roadmap" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">7 Langkah</a>
-                <a href="#template" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Template Prompt</a>
-                <a href="#tools" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Tools</a>
-                <a href="#faq" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">FAQ</a>
+            <nav class="hidden lg:flex items-center gap-6 text-sm font-semibold text-slate-600" aria-label="Navigasi Utama">
+                <a href="#zuno" class="znav-link">Blueprint Zuno</a>
+                <a href="#konsep" class="znav-link">Konsep</a>
+                <a href="#use-case" class="znav-link">Contoh Nyata</a>
+                <a href="#roadmap" class="znav-link">7 Langkah</a>
+                <a href="#template" class="znav-link">Template Prompt</a>
+                <a href="#tools" class="znav-link">Tools</a>
+                <a href="#faq" class="znav-link">FAQ</a>
+                <a href="#radar" class="znav-link">Radar Apify</a>
             </nav>
 
             <!-- Learning Progress Pill -->
@@ -99,14 +232,15 @@
                     <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                     <span>Progres: <strong id="nav-progress-text">0/21</strong></span>
                 </a>
-                <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-500" aria-label="Buka menu navigasi" aria-expanded="false">
+                <button id="mobile-menu-btn" class="lg:hidden p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-500" aria-label="Buka menu navigasi" aria-expanded="false">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
                 </button>
             </div>
         </div>
 
         <!-- Mobile Menu Dropdown -->
-        <div id="mobile-menu" class="hidden md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 pt-2 pb-4 space-y-1 text-sm font-medium">
+        <div id="mobile-menu" class="hidden lg:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 pt-2 pb-4 space-y-1 text-sm font-medium">
+            <a href="#zuno" class="block px-3 py-2 rounded-lg hover:bg-slate-100 font-bold text-brand-700">Blueprint Zuno</a>
             <a href="#konsep" class="block px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">1. Apa itu AI Agent?</a>
             <a href="#use-case" class="block px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">2. Contoh Produktivitas</a>
             <a href="#roadmap" class="block px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">3. Roadmap Build dari Nol</a>
@@ -114,22 +248,505 @@
             <a href="#tools" class="block px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">5. Perbandingan Tools</a>
             <a href="#keamanan" class="block px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">6. Tips Keamanan</a>
             <a href="#faq" class="block px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">7. FAQ Pemula</a>
+            <a href="#radar" class="block px-3 py-2 rounded-lg hover:bg-slate-100">Radar Tools Apify</a>
         </div>
     </header>
 
     <main>
-        <!-- 1. HERO SECTION -->
-        <section class="relative overflow-hidden bg-grid-pattern border-b border-slate-200 dark:border-slate-800/80 pt-14 pb-20 sm:pt-24 sm:pb-28">
+
+        <!-- ZUNO HERO -->
+        <section id="beranda" class="zhero" aria-labelledby="zhero-title">
+            <div class="zhero__bg" aria-hidden="true">
+                <span class="zhero__blob zhero__blob--a"></span>
+                <span class="zhero__blob zhero__blob--b"></span>
+                <span class="zhero__grid"></span>
+            </div>
+            <div class="zwrap zhero__inner">
+                <div class="zhero__copy">
+                    <p class="zhero__tags" data-hero>
+                        <span class="ztag ztag--ink">Challenge · The Blueprint</span>
+                        <span class="ztag ztag--live"><span class="zdot"></span>Status: rancangan bertahap</span>
+                    </p>
+                    <h1 id="zhero-title" class="zhero__title" data-hero>
+                        <span class="zhero__name">Zuno<span class="zhero__colon">:</span></span>
+                        <span class="zhero__line">Tim Agent AI yang Ngonten dari <em>Nol Ide</em> Sampai <em>Iklan</em></span>
+                    </h1>
+                    <p class="zhero__hi" data-hero>Hai, kenalin Gue <strong>Zulnan</strong>. Gue sales yang belajar AI sambil bikin, bukan cuma ngomongin.</p>
+                    <div class="zpromise" data-hero>
+                        <span class="zpromise__ico"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg></span>
+                        <p><strong>Janji utama Zuno:</strong> konsisten ngonten tanpa ribet mikirin ide, nulis naskah, dan edit. Tinggal kirim ke Zuno, dan tim agent AI-nya yang mengerjakan: dari belum punya ide, sampai posting otomatis, koreksi performa, dan iklan otomatis di Meta Ads, dalam batas yang kamu tetapkan.</p>
+                    </div>
+                    <div class="zhero__cta" data-hero>
+                        <a href="#zuno" class="zbtn zbtn--primary" data-magnetic>Lihat Blueprint Zuno <svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+                        <a href="#panduan" class="zbtn zbtn--ghost" data-magnetic>Mulai Panduan AI Agent</a>
+                    </div>
+                    <dl class="zhero__stats" data-hero>
+                        <div><dt>Divisi</dt><dd data-count="8">8</dd></div>
+                        <div><dt>Agent versi awal</dt><dd data-count="3">3</dd></div>
+                        <div><dt>Fase</dt><dd data-count="4">4</dd></div>
+                        <div><dt>Memori inti</dt><dd data-count="5">5</dd></div>
+                    </dl>
+                </div>
+                <div class="zhero__stage" data-hero aria-hidden="true">
+                    <span class="zring zring--a"></span>
+                    <span class="zring zring--b"></span>
+                    <span class="zhero__glow"></span>
+                    <img class="zhero__mascot" src="assets/img/zuno-mascot-640.webp"
+                         srcset="assets/img/zuno-mascot-640.webp 640w, assets/img/zuno-mascot.webp 999w"
+                         sizes="(max-width: 768px) 80vw, 520px" width="999" height="1187" alt="" fetchpriority="high">
+                    <span class="zhero__shadow"></span>
+                    <span class="zorbit zorbit--1"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/></svg>Ide</span>
+                    <span class="zorbit zorbit--2"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>Naskah</span>
+                    <span class="zorbit zorbit--3"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 11v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8zM4 11l1.4-5.4 13.6-3 1 3.9zM8.5 4.7l2 4.4M13.3 3.6l2 4.4"/></svg>Edit</span>
+                    <span class="zorbit zorbit--4"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg>Posting</span>
+                    <span class="zorbit zorbit--5"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1zM15 8a5 5 0 0 1 0 8M18 5a9 9 0 0 1 0 14"/></svg>Iklan</span>
+                    <svg class="zbolt" viewBox="0 0 40 60"><path d="M24 2 6 34h14l-6 24 22-34H22z"/></svg>
+                </div>
+            </div>
+            <a href="#zuno" class="zhero__scroll" aria-label="Gulir ke blueprint Zuno"><span></span></a>
+        </section>
+
+        <!-- ZUNO BLUEPRINT (dari teks-web-zuno.docx) -->
+        <div id="zuno" class="zuno">
+            <section class="zband zband--intro" aria-labelledby="zuno-title">
+                <div class="zwrap">
+                    <div class="zintro">
+                        <p class="zeyebrow" data-r>Challenge · The Blueprint</p>
+                        <h2 id="zuno-title" class="zh2" data-r>Blueprint <span class="zmark">Zuno</span>, dari ide sampai iklan.</h2>
+                        <p class="zlead" data-r>Rancangan tim agent AI yang bekerja dari belum punya ide sampai iklan, lalu belajar dari hasilnya. Dibangun bertahap, dalam batas yang kamu tetapkan.</p>
+                        <nav class="zjump" aria-label="Bagian blueprint Zuno" data-r>
+                            <a href="#zuno-01">01 Nama sistem</a><a href="#zuno-02">02 Masalah</a><a href="#zuno-03">03 Tim &amp; fase</a><a href="#zuno-04">04 Divisi</a><a href="#zuno-05">05 Memori</a><a href="#zuno-status">Status</a>
+                        </nav>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 01 -->
+            <section id="zuno-01" class="zband" aria-labelledby="zuno-01-title">
+                <div class="zwrap zsplit">
+                    <div>
+                        
+                <header class="zsec__head">
+                    <p class="zsec__no" data-r><span>01</span>Blueprint Zuno</p>
+                    <h3 class="zsec__title" data-r><span id="zuno-01-title">Nama sistem / solusi agen</span></h3>
+                    
+                </header>
+                        <p class="zbody" data-r><strong>Zuno, tim kreatif agent AI yang dibangun dari namaku sendiri.</strong> Namanya mudah diucapkan, mudah diingat, dan kuat sebagai brand.</p>
+                        <div class="zcallout" data-r>
+                            <span class="zcallout__ico"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17 2l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 22l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3"/></svg></span>
+                            <p><b>Pembeda:</b> Zuno tidak berhenti di draf. Dia bekerja dari ide sampai iklan dan belajar dari hasilnya. Pengguna cukup setup sekali, lalu tinggal kirim bahan, atau tidak kirim apa-apa kalau lagi buntu ide.</p>
+                        </div>
+                    </div>
+                    <div class="zwin" data-r>
+                        <div class="zwin__bar" aria-hidden="true"><span></span><span></span><span></span><b>zuno · profil agent</b></div>
+                        <div class="zwin__body">
+                            <div class="zprofile">
+                                <img src="assets/img/zuno-mark.png" width="192" height="192" alt="" loading="lazy" class="zprofile__av">
+                                <div><b class="zprofile__name">Zuno</b><span class="zprofile__role">Tim kreatif agent AI</span></div>
+                                <span class="zpill zpill--teal"><span class="zdot"></span>Rancangan</span>
+                            </div>
+                            <div class="zgrid2">
+                                <div class="ztile">
+                                    <p class="ztile__label"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Untuk siapa</p>
+                                    <ul class="zchips">
+                                        <li>Content creator pemula</li><li>Usia 25-35 tahun</li><li>Karyawan swasta</li><li>Level AI beginner</li>
+                                    </ul>
+                                    <p class="ztile__note">Awalnya gue pakai sendiri, lalu dibuka ke orang lain kalau terbukti jalan.</p>
+                                </div>
+                                <div class="ztile">
+                                    <p class="ztile__label"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg>Karakter</p>
+                                    <ul class="ztraits">
+                                        <li><span class="ztraits__ico ztraits__ico--sun"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg></span>Santai dan lucu</li>
+                                        <li><span class="ztraits__ico ztraits__ico--orange"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M13 2 3 14h9l-1 8 10-12h-9z"/></svg></span>Tegas di momen tertentu</li>
+                                        <li><span class="ztraits__ico ztraits__ico--cyan"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"/></svg></span>Empatik</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="ztile ztile--flow">
+                                <p class="ztile__label"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2 2 7l10 5 10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Jangkauan kerja</p>
+                                <ol class="zmini-flow">
+                                    <li>Ide</li><li>Naskah</li><li>Edit</li><li>Posting</li><li>Performa</li><li>Iklan</li>
+                                </ol>
+                                <span class="zmini-flow__bar"><i></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 02 -->
+            <section id="zuno-02" class="zband zband--tint" aria-labelledby="zuno-02-title">
+                <div class="zwrap">
+                    
+                <header class="zsec__head">
+                    <p class="zsec__no" data-r><span>02</span>Blueprint Zuno</p>
+                    <h3 class="zsec__title" data-r><span id="zuno-02-title">Masalah yang ingin ditangani</span></h3>
+                    <p class="zsec__lead" data-r>Banyak orang pengen ngonten tapi berhenti di tengah jalan karena:</p>
+                </header>
+                    <div class="zproblems">
+                        <article class="zalert" data-r><span class="zalert__ico"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/></svg></span><p>Tidak punya ide, dan tidak tahu cara mulai.</p><span class="zalert__tag">Hambatan 1</span></article>
+                        <article class="zalert" data-r><span class="zalert__ico"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM12 6v6l4 2"/></svg></span><p>Nulis naskah dan edit makan waktu, padahal harus mengurus kerjaan dan keluarga.</p><span class="zalert__tag">Hambatan 2</span></article>
+                        <article class="zalert" data-r><span class="zalert__ico"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 3l18 18M10.6 10.6a2 2 0 0 0 2.8 2.8M9.9 4.2A10 10 0 0 1 22 12a17 17 0 0 1-2.2 3.2M6.6 6.6A17 17 0 0 0 2 12s4 7 10 7a9.7 9.7 0 0 0 5.4-1.6"/></svg></span><p>Tidak pede tampil di kamera.</p><span class="zalert__tag">Hambatan 3</span></article>
+                        <article class="zalert" data-r><span class="zalert__ico"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2 7h20v12H2zM2 11h20M6 15h4"/></svg></span><p>Fitur tools AI banyak yang berbayar.</p><span class="zalert__tag">Hambatan 4</span></article>
+                    </div>
+                    <blockquote class="zquote" data-r>
+                        <p>Gue ngalamin sendiri. Yang paling kena adalah pemula; yang sudah punya fondasi (misalnya akun sudah terverifikasi) bukan target utama.</p>
+                        <cite>— Zulnan</cite>
+                    </blockquote>
+                    <div class="zgrid2 zgrid2--wide">
+                        <div class="zwin" data-r>
+                            <div class="zwin__bar" aria-hidden="true"><span></span><span></span><span></span><b>ukuran berhasil</b></div>
+                            <div class="zwin__body">
+                                <p class="zkpi__label"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM12 18a6 6 0 1 0 0-12 6 6 0 0 0 0 12zM12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/></svg>Ukuran berhasil</p>
+                                <p class="zkpi__value">Jumlah konten yang tayang konsisten tiap minggu.</p>
+                                <div class="zweeks" aria-label="Ilustrasi target: konten tayang setiap minggu">
+                                    <span>Mg 1</span><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                                    <span>Mg 2</span><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                                    <span>Mg 3</span><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                                    <span>Mg 4</span><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                                </div>
+                                <p class="ztile__note">Ilustrasi target, bukan data. Followers naik adalah hasil lanjutan.</p>
+                            </div>
+                        </div>
+                        <div class="zwin" data-r>
+                            <div class="zwin__bar" aria-hidden="true"><span></span><span></span><span></span><b>monetisasi</b></div>
+                            <div class="zwin__body">
+                                <p class="zkpi__label"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Monetisasi</p>
+                                <p class="zkpi__value">Pengguna membayar lewat sekali beli atau jasa.</p>
+                                <div class="zsplitbar">
+                                    <div><span class="zsplitbar__ico"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2 7h20v12H2zM2 11h20M6 15h4"/></svg></span><b>Sekali beli</b></div>
+                                    <div><span class="zsplitbar__ico"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><b>Jasa</b></div>
+                                </div>
+                                <p class="zpill zpill--orange"><span class="zdot"></span>Harga masih gue uji</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 03 -->
+            <section id="zuno-03" class="zband" aria-labelledby="zuno-03-title">
+                <div class="zwrap">
+                    
+                <header class="zsec__head">
+                    <p class="zsec__no" data-r><span>03</span>Blueprint Zuno</p>
+                    <h3 class="zsec__title" data-r><span id="zuno-03-title">Agen berjalan sendiri atau dalam tim?</span></h3>
+                    
+                </header>
+                    <div class="zsplit zsplit--loop">
+                        <div>
+                            <p class="zbig" data-r>Dalam tim yang tumbuh bertahap.</p>
+                            <p class="zbody" data-r>Satu putaran penuh: ide, naskah, edit, posting, baca performa, pilih konten pemenang, iklan, lalu belajar untuk konten berikutnya. Itu terlalu luas untuk satu agent.</p>
+                        </div>
+                        <div class="zloop" data-r aria-label="Satu putaran penuh Zuno">
+                            <svg class="zloop__ring" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="41"/><circle class="zloop__run" cx="50" cy="50" r="41"/></svg>
+                            <div class="zloop__core"><img src="assets/img/zuno-mark.png" width="192" height="192" alt="" loading="lazy"><b>1 putaran</b><span>8 langkah</span></div>
+                            <ol class="zloop__nodes"><li class="zloop__node" style="--x:50.00%;--y:9.00%"><span class="zloop__dot"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/></svg></span><span class="zloop__label">Ide</span></li><li class="zloop__node" style="--x:78.99%;--y:21.01%"><span class="zloop__dot"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></span><span class="zloop__label">Naskah</span></li><li class="zloop__node" style="--x:91.00%;--y:50.00%"><span class="zloop__dot"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 11v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8zM4 11l1.4-5.4 13.6-3 1 3.9zM8.5 4.7l2 4.4M13.3 3.6l2 4.4"/></svg></span><span class="zloop__label">Edit</span></li><li class="zloop__node" style="--x:78.99%;--y:78.99%"><span class="zloop__dot"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg></span><span class="zloop__label">Posting</span></li><li class="zloop__node" style="--x:50.00%;--y:91.00%"><span class="zloop__dot"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 3v18h18M7 15l4-4 3 3 5-6"/></svg></span><span class="zloop__label">Baca performa</span></li><li class="zloop__node" style="--x:21.01%;--y:78.99%"><span class="zloop__dot"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg></span><span class="zloop__label">Pilih pemenang</span></li><li class="zloop__node" style="--x:9.00%;--y:50.00%"><span class="zloop__dot"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1zM15 8a5 5 0 0 1 0 8M18 5a9 9 0 0 1 0 14"/></svg></span><span class="zloop__label">Iklan</span></li><li class="zloop__node" style="--x:21.01%;--y:21.01%"><span class="zloop__dot"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17 2l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 22l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3"/></svg></span><span class="zloop__label">Belajar</span></li></ol>
+                        </div>
+                    </div>
+
+                    <div class="zwin zphases" data-r>
+                        <div class="zwin__bar" aria-hidden="true"><span></span><span></span><span></span><b>roadmap fase</b></div>
+                        <div class="zwin__body">
+                            <div class="zphases__head"><span>Fase</span><span>Yang dikerjakan</span></div>
+                            <ol class="zphases__list">
+                                <li><b>1</b><span>Dari ide sampai naskah dan edit</span><i style="--s:.25"></i></li>
+                                <li><b>2</b><span>Posting otomatis dan laporan performa</span><i style="--s:.5"></i></li>
+                                <li><b>3</b><span>Koreksi performa dan deteksi konten pemenang</span><i style="--s:.75"></i></li>
+                                <li><b>4</b><span>Iklan otomatis di Meta Ads</span><i style="--s:1"></i></li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <p class="zsub" data-r><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10zM9 12l2 2 4-4"/></svg>Otomatis dengan pagar:</p>
+                    <div class="zgrid2">
+                        <article class="zguard" data-r>
+                            <header><span class="zguard__ico"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg></span><h4>Posting</h4><span class="zswitch" aria-hidden="true"><i></i></span></header>
+                            <p>Di fase awal gue setujui tiap konten. Setelah kualitasnya stabil, konten yang lolos checklist penjaga mutu tayang otomatis.</p>
+                        </article>
+                        <article class="zguard" data-r>
+                            <header><span class="zguard__ico zguard__ico--orange"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1zM15 8a5 5 0 0 1 0 8M18 5a9 9 0 0 1 0 14"/></svg></span><h4>Iklan</h4><span class="zswitch" aria-hidden="true"><i></i></span></header>
+                            <p>Hanya konten yang memenuhi kriteria pemenang yang bisa diiklankan, dalam batas anggaran harian dan total yang gue kunci. Iklan pertama dan kenaikan anggaran disetujui dulu. Kalau agent ragu atau gagal, iklan berhenti.</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 04 -->
+            <section id="zuno-04" class="zband zband--dark" aria-labelledby="zuno-04-title">
+                <span class="zdark__glow zdark__glow--a" aria-hidden="true"></span>
+                <span class="zdark__glow zdark__glow--b" aria-hidden="true"></span>
+                <div class="zwrap">
+                    
+                <header class="zsec__head">
+                    <p class="zsec__no" data-r><span>04</span>Blueprint Zuno</p>
+                    <h3 class="zsec__title" data-r><span id="zuno-04-title">Anggota tim dan pola kerja samanya</span></h3>
+                    <p class="zsec__lead" data-r>Tim punya 8 divisi. Di versi awal, divisi-divisi itu dipegang oleh 3 agent supaya mudah dipantau: Kreator, Koordinator-Penjaga, dan Operator. Saat sistem membesar, tiap divisi bisa berdiri sendiri.</p>
+                </header>
+                    <ul class="zagents" data-r>
+                        <li class="zagents__item zagents__item--kreator"><span></span>Kreator</li>
+                        <li class="zagents__item zagents__item--koor"><span></span>Koordinator-Penjaga</li>
+                        <li class="zagents__item zagents__item--operator"><span></span>Operator</li>
+                    </ul>
+                    <ol class="zdivs">
+                    <li class="zdiv zdiv--l zdiv--koor" data-zdiv>
+                        <div class="zdiv__copy">
+                            <span class="zdiv__no">Divisi 01</span>
+                            <h4 class="zdiv__name">Koordinator</h4>
+                            <p class="zdiv__meta"><span class="zchip zchip--koor">Koordinator-Penjaga</span><span class="zchip zchip--phase">Fase 1</span></p>
+                            <p class="zdiv__task">Membagi tugas, mengatur status Kartu Konten, melapor ke Zulnan</p>
+                            <p class="zdiv__out"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Hasil yang diserahkan:</b> Antrean tugas dan ringkasan harian</span></p>
+                            <p class="zdiv__no-go"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 6 6 18M6 6l12 12"/></svg><span><b>Tidak boleh:</b> Membuat konten, posting, menyentuh iklan</span></p>
+                        </div>
+                        <div class="zplat" aria-hidden="true">
+                            <span class="zplat__slab"></span>
+                            <span class="zplat__holo"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 3v12M18 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM6 21a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM18 9a9 9 0 0 1-9 9"/></svg></span>
+                            <span class="zplat__sat zplat__sat--1"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 4h18v16H3zM9 4v16M15 4v16"/></svg></span><span class="zplat__sat zplat__sat--2"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg></span><span class="zplat__sat zplat__sat--3"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg></span>
+                        </div>
+                        <svg class="zdiv__arrow" viewBox="0 0 720 112" aria-hidden="true" focusable="false"><path class="zdiv__glow" d="M560 6 C 520 70, 300 40, 170 104"/><path class="zdiv__line" d="M560 6 C 520 70, 300 40, 170 104"/><path class="zdiv__tip" d="M170 104 l 20 -2 M170 104 l 8 -18"/></svg>
+                    </li>
+                    <li class="zdiv zdiv--r zdiv--kreator" data-zdiv>
+                        <div class="zdiv__copy">
+                            <span class="zdiv__no">Divisi 02</span>
+                            <h4 class="zdiv__name">Riset &amp; Strategi</h4>
+                            <p class="zdiv__meta"><span class="zchip zchip--kreator">Kreator</span><span class="zchip zchip--phase">Fase 1</span></p>
+                            <p class="zdiv__task">Mencari ide, tren, dan angle dari niche dan data performa; menyiapkan ide dan kerangka produk</p>
+                            <p class="zdiv__out"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Hasil yang diserahkan:</b> Daftar ide dan angle</span></p>
+                            <p class="zdiv__no-go"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 6 6 18M6 6l12 12"/></svg><span><b>Tidak boleh:</b> Menulis versi final, posting</span></p>
+                        </div>
+                        <div class="zplat" aria-hidden="true">
+                            <span class="zplat__slab"></span>
+                            <span class="zplat__holo"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16zM21 21l-4.3-4.3"/></svg></span>
+                            <span class="zplat__sat zplat__sat--1"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/></svg></span><span class="zplat__sat zplat__sat--2"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 6c0 1.7 3.6 3 8 3s8-1.3 8-3-3.6-3-8-3-8 1.3-8 3zM4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg></span><span class="zplat__sat zplat__sat--3"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 3v18h18M7 15l4-4 3 3 5-6"/></svg></span>
+                        </div>
+                        <svg class="zdiv__arrow" viewBox="0 0 720 112" aria-hidden="true" focusable="false"><path class="zdiv__glow" d="M160 6 C 200 70, 420 40, 550 104"/><path class="zdiv__line" d="M160 6 C 200 70, 420 40, 550 104"/><path class="zdiv__tip" d="M550 104 l -20 -2 M550 104 l -8 -18"/></svg>
+                    </li>
+                    <li class="zdiv zdiv--l zdiv--kreator" data-zdiv>
+                        <div class="zdiv__copy">
+                            <span class="zdiv__no">Divisi 03</span>
+                            <h4 class="zdiv__name">Penulis</h4>
+                            <p class="zdiv__meta"><span class="zchip zchip--kreator">Kreator</span><span class="zchip zchip--phase">Fase 1</span></p>
+                            <p class="zdiv__task">Menulis naskah, caption, halaman jual, dan studi kasus portofolio</p>
+                            <p class="zdiv__out"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Hasil yang diserahkan:</b> Naskah siap edit</span></p>
+                            <p class="zdiv__no-go"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 6 6 18M6 6l12 12"/></svg><span><b>Tidak boleh:</b> Riset tren, mengedit visual</span></p>
+                        </div>
+                        <div class="zplat" aria-hidden="true">
+                            <span class="zplat__slab"></span>
+                            <span class="zplat__holo"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></span>
+                            <span class="zplat__sat zplat__sat--1"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9zM14 3v6h6M8 13h8M8 17h5"/></svg></span><span class="zplat__sat zplat__sat--2"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg></span><span class="zplat__sat zplat__sat--3"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg></span>
+                        </div>
+                        <svg class="zdiv__arrow" viewBox="0 0 720 112" aria-hidden="true" focusable="false"><path class="zdiv__glow" d="M560 6 C 520 70, 300 40, 170 104"/><path class="zdiv__line" d="M560 6 C 520 70, 300 40, 170 104"/><path class="zdiv__tip" d="M170 104 l 20 -2 M170 104 l 8 -18"/></svg>
+                    </li>
+                    <li class="zdiv zdiv--r zdiv--kreator" data-zdiv>
+                        <div class="zdiv__copy">
+                            <span class="zdiv__no">Divisi 04</span>
+                            <h4 class="zdiv__name">Editor Visual/Video</h4>
+                            <p class="zdiv__meta"><span class="zchip zchip--kreator">Kreator</span><span class="zchip zchip--phase">Fase 1</span></p>
+                            <p class="zdiv__task">Mengubah naskah menjadi visual atau video</p>
+                            <p class="zdiv__out"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Hasil yang diserahkan:</b> File visual atau video</span></p>
+                            <p class="zdiv__no-go"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 6 6 18M6 6l12 12"/></svg><span><b>Tidak boleh:</b> Mengubah isi naskah</span></p>
+                        </div>
+                        <div class="zplat" aria-hidden="true">
+                            <span class="zplat__slab"></span>
+                            <span class="zplat__holo"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 11v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8zM4 11l1.4-5.4 13.6-3 1 3.9zM8.5 4.7l2 4.4M13.3 3.6l2 4.4"/></svg></span>
+                            <span class="zplat__sat zplat__sat--1"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 5h18v14H3zM3 16l5-5 4 4 3-3 6 6M8.5 9.5h.01"/></svg></span><span class="zplat__sat zplat__sat--2"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2 12h2M6 8v8M10 5v14M14 8v8M18 10v4M22 12h0"/></svg></span><span class="zplat__sat zplat__sat--3"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3zM19 10v1a7 7 0 0 1-14 0v-1M12 18v4"/></svg></span>
+                        </div>
+                        <svg class="zdiv__arrow" viewBox="0 0 720 112" aria-hidden="true" focusable="false"><path class="zdiv__glow" d="M160 6 C 200 70, 420 40, 550 104"/><path class="zdiv__line" d="M160 6 C 200 70, 420 40, 550 104"/><path class="zdiv__tip" d="M550 104 l -20 -2 M550 104 l -8 -18"/></svg>
+                    </li>
+                    <li class="zdiv zdiv--l zdiv--koor" data-zdiv>
+                        <div class="zdiv__copy">
+                            <span class="zdiv__no">Divisi 05</span>
+                            <h4 class="zdiv__name">Penjaga Mutu</h4>
+                            <p class="zdiv__meta"><span class="zchip zchip--koor">Koordinator-Penjaga</span><span class="zchip zchip--phase">Fase 1</span></p>
+                            <p class="zdiv__task">Memeriksa suara brand, fakta, klaim, format platform, dan persetujuan leads</p>
+                            <p class="zdiv__out"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Hasil yang diserahkan:</b> Keputusan lolos atau tidak beserta catatan (hak veto)</span></p>
+                            <p class="zdiv__no-go"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 6 6 18M6 6l12 12"/></svg><span><b>Tidak boleh:</b> Menulis ulang sendiri</span></p>
+                        </div>
+                        <div class="zplat" aria-hidden="true">
+                            <span class="zplat__slab"></span>
+                            <span class="zplat__holo"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10zM9 12l2 2 4-4"/></svg></span>
+                            <span class="zplat__sat zplat__sat--1"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="zplat__sat zplat__sat--2"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 22V4M4 4h13l-2 4 2 4H4"/></svg></span><span class="zplat__sat zplat__sat--3"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg></span>
+                        </div>
+                        <svg class="zdiv__arrow" viewBox="0 0 720 112" aria-hidden="true" focusable="false"><path class="zdiv__glow" d="M560 6 C 520 70, 300 40, 170 104"/><path class="zdiv__line" d="M560 6 C 520 70, 300 40, 170 104"/><path class="zdiv__tip" d="M170 104 l 20 -2 M170 104 l 8 -18"/></svg>
+                    </li>
+                    <li class="zdiv zdiv--r zdiv--operator" data-zdiv>
+                        <div class="zdiv__copy">
+                            <span class="zdiv__no">Divisi 06</span>
+                            <h4 class="zdiv__name">Publisher</h4>
+                            <p class="zdiv__meta"><span class="zchip zchip--operator">Operator</span><span class="zchip zchip--phase">Fase 2</span></p>
+                            <p class="zdiv__task">Menjadwalkan dan memposting ke beberapa platform</p>
+                            <p class="zdiv__out"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Hasil yang diserahkan:</b> Bukti tayang</span></p>
+                            <p class="zdiv__no-go"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 6 6 18M6 6l12 12"/></svg><span><b>Tidak boleh:</b> Memposting yang belum Disetujui</span></p>
+                        </div>
+                        <div class="zplat" aria-hidden="true">
+                            <span class="zplat__slab"></span>
+                            <span class="zplat__holo"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4.5 16.5c-1.5 1.3-2 5-2 5s3.7-.5 5-2c.7-.8.7-2.1-.1-2.9a2.2 2.2 0 0 0-2.9-.1zM12 15l-3-3a22 22 0 0 1 2-3.9A12.9 12.9 0 0 1 22 2c0 2.7-.8 7.5-6 11a22.4 22.4 0 0 1-4 2zM9 12H4s.6-3 2-4c1.6-1.1 5 0 5 0M12 15v5s3-.6 4-2c1.1-1.6 0-5 0-5"/></svg></span>
+                            <span class="zplat__sat zplat__sat--1"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 5h18v16H3zM16 3v4M8 3v4M3 10h18"/></svg></span><span class="zplat__sat zplat__sat--2"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg></span><span class="zplat__sat zplat__sat--3"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg></span>
+                        </div>
+                        <svg class="zdiv__arrow" viewBox="0 0 720 112" aria-hidden="true" focusable="false"><path class="zdiv__glow" d="M160 6 C 200 70, 420 40, 550 104"/><path class="zdiv__line" d="M160 6 C 200 70, 420 40, 550 104"/><path class="zdiv__tip" d="M550 104 l -20 -2 M550 104 l -8 -18"/></svg>
+                    </li>
+                    <li class="zdiv zdiv--l zdiv--operator" data-zdiv>
+                        <div class="zdiv__copy">
+                            <span class="zdiv__no">Divisi 07</span>
+                            <h4 class="zdiv__name">Analis</h4>
+                            <p class="zdiv__meta"><span class="zchip zchip--operator">Operator</span><span class="zchip zchip--phase">Fase 2-3</span></p>
+                            <p class="zdiv__task">Membaca performa, melabeli konten menang atau kalah, memilih kandidat iklan, mencatat leads</p>
+                            <p class="zdiv__out"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Hasil yang diserahkan:</b> Tabel performa, daftar kandidat iklan, Database Leads</span></p>
+                            <p class="zdiv__no-go"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 6 6 18M6 6l12 12"/></svg><span><b>Tidak boleh:</b> Menjalankan iklan</span></p>
+                        </div>
+                        <div class="zplat" aria-hidden="true">
+                            <span class="zplat__slab"></span>
+                            <span class="zplat__holo"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 3v18h18M7 15l4-4 3 3 5-6"/></svg></span>
+                            <span class="zplat__sat zplat__sat--1"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg></span><span class="zplat__sat zplat__sat--2"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 6c0 1.7 3.6 3 8 3s8-1.3 8-3-3.6-3-8-3-8 1.3-8 3zM4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg></span><span class="zplat__sat zplat__sat--3"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 14l4-4M3.3 19a10 10 0 1 1 17.4 0"/></svg></span>
+                        </div>
+                        <svg class="zdiv__arrow" viewBox="0 0 720 112" aria-hidden="true" focusable="false"><path class="zdiv__glow" d="M560 6 C 520 70, 300 40, 170 104"/><path class="zdiv__line" d="M560 6 C 520 70, 300 40, 170 104"/><path class="zdiv__tip" d="M170 104 l 20 -2 M170 104 l 8 -18"/></svg>
+                    </li>
+                    <li class="zdiv zdiv--r zdiv--operator" data-zdiv>
+                        <div class="zdiv__copy">
+                            <span class="zdiv__no">Divisi 08</span>
+                            <h4 class="zdiv__name">Ad Manager</h4>
+                            <p class="zdiv__meta"><span class="zchip zchip--operator">Operator</span><span class="zchip zchip--phase">Fase 4</span></p>
+                            <p class="zdiv__task">Menyusun dan menjalankan iklan Meta dalam batas anggaran</p>
+                            <p class="zdiv__out"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Hasil yang diserahkan:</b> Laporan iklan</span></p>
+                            <p class="zdiv__no-go"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 6 6 18M6 6l12 12"/></svg><span><b>Tidak boleh:</b> Jalan tanpa persetujuan, melewati batas anggaran</span></p>
+                        </div>
+                        <div class="zplat" aria-hidden="true">
+                            <span class="zplat__slab"></span>
+                            <span class="zplat__holo"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1zM15 8a5 5 0 0 1 0 8M18 5a9 9 0 0 1 0 14"/></svg></span>
+                            <span class="zplat__sat zplat__sat--1"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span><span class="zplat__sat zplat__sat--2"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM12 18a6 6 0 1 0 0-12 6 6 0 0 0 0 12zM12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/></svg></span><span class="zplat__sat zplat__sat--3"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 3v18h18M7 15l4-4 3 3 5-6"/></svg></span>
+                        </div>
+                        
+                    </li>
+                    </ol>
+
+                    <h4 class="zsub zsub--light" data-r><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Cara tim bekerja:</h4>
+                    <div class="zflow" data-r aria-label="Alur kerja tim Zuno">
+                        <div class="zflow__node zflow__node--you"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8"/></svg><b>Zulnan</b><small>kirim bahan (atau tidak sama sekali)</small></div>
+                        <span class="zflow__arrow" aria-hidden="true"></span>
+                        <div class="zflow__node zflow__node--kreator"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg><b>Kreator</b></div>
+                        <span class="zflow__arrow" aria-hidden="true"></span>
+                        <div class="zflow__node zflow__node--koor"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10zM9 12l2 2 4-4"/></svg><b>Koordinator-Penjaga</b></div>
+                        <span class="zflow__arrow" aria-hidden="true"></span>
+                        <div class="zflow__node zflow__node--operator"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4.5 16.5c-1.5 1.3-2 5-2 5s3.7-.5 5-2c.7-.8.7-2.1-.1-2.9a2.2 2.2 0 0 0-2.9-.1zM12 15l-3-3a22 22 0 0 1 2-3.9A12.9 12.9 0 0 1 22 2c0 2.7-.8 7.5-6 11a22.4 22.4 0 0 1-4 2zM9 12H4s.6-3 2-4c1.6-1.1 5 0 5 0M12 15v5s3-.6 4-2c1.1-1.6 0-5 0-5"/></svg><b>Operator</b></div>
+                        <span class="zflow__arrow" aria-hidden="true"></span>
+                        <div class="zflow__node zflow__node--mem"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 6c0 1.7 3.6 3 8 3s8-1.3 8-3-3.6-3-8-3-8 1.3-8 3zM4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg><b>Memori</b><small>hasil performa jadi bahan Kreator berikutnya</small></div>
+                    </div>
+
+                    <div class="zwin zwin--dark" data-r>
+                        <div class="zwin__bar" aria-hidden="true"><span></span><span></span><span></span><b>serah terima · kartu konten</b></div>
+                        <div class="zwin__body">
+                            <p class="zbody zbody--light"><b>Serah terima:</b> satu Kartu Konten per konten dengan status berurutan.</p>
+                            <ol class="ztrack"><li><span class="ztrack__dot">1</span><span>Ide</span></li><li><span class="ztrack__dot">2</span><span>Draf</span></li><li><span class="ztrack__dot">3</span><span>Teredit</span></li><li><span class="ztrack__dot">4</span><span>Lolos QA</span></li><li><span class="ztrack__dot">5</span><span>Disetujui</span></li><li><span class="ztrack__dot">6</span><span>Terjadwal</span></li><li><span class="ztrack__dot">7</span><span>Tayang</span></li><li><span class="ztrack__dot">8</span><span>Terukur</span></li></ol>
+                        </div>
+                    </div>
+
+                    <div class="zgrid2">
+                        <article class="zrule" data-r>
+                            <h5><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>Aturan koordinasi</h5>
+                            <p>Setiap hasil punya satu pemilik, semua lewat Koordinator, dan revisi maksimal 2 putaran sebelum naik ke Zulnan.</p>
+                            <p class="zrule__sub">Kalau saran bertentangan, urutannya:</p>
+                            <ol class="zrank"><li><b>1</b>Aturan brand</li><li><b>2</b>Data performa</li><li><b>3</b>Ide kreatif</li></ol>
+                        </article>
+                        <article class="zrule" data-r>
+                            <h5><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2 2 7l10 5 10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Pemisahan peran</h5>
+                            <div class="zsplitrole">
+                                <div><span><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 3v18h18M7 15l4-4 3 3 5-6"/></svg></span><b>Analis</b><small>yang menilai</small></div>
+                                <i aria-hidden="true">≠</i>
+                                <div><span><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1zM15 8a5 5 0 0 1 0 8M18 5a9 9 0 0 1 0 14"/></svg></span><b>Ad Manager</b><small>yang mengeksekusi</small></div>
+                            </div>
+                            <p>Analis dan Ad Manager adalah divisi berbeda, supaya penilaian dan eksekusi tidak dipegang peran yang sama.</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 05 -->
+            <section id="zuno-05" class="zband" aria-labelledby="zuno-05-title">
+                <div class="zwrap">
+                    
+                <header class="zsec__head">
+                    <p class="zsec__no" data-r><span>05</span>Blueprint Zuno</p>
+                    <h3 class="zsec__title" data-r><span id="zuno-05-title">Hal yang perlu disimpan di memori</span></h3>
+                    <p class="zsec__lead" data-r>Lima hal inti:</p>
+                </header>
+                    <ol class="zmem">
+                        <li data-r><span class="zmem__ico"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3zM19 10v1a7 7 0 0 1-14 0v-1M12 18v4"/></svg></span><b>Suara dan gaya</b><small>termasuk kata wajib dan terlarang</small></li>
+                        <li data-r><span class="zmem__ico"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM12 18a6 6 0 1 0 0-12 6 6 0 0 0 0 12zM12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/></svg></span><b>Niche dan tujuan</b></li>
+                        <li data-r><span class="zmem__ico"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10zM9 12l2 2 4-4"/></svg></span><b>Aturan main dan larangan</b><small>termasuk batas anggaran iklan dan syarat posting otomatis</small></li>
+                        <li data-r><span class="zmem__ico"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9zM14 3v6h6M8 13h8M8 17h5"/></svg></span><b>Cerita inti dan portofolio</b></li>
+                        <li data-r><span class="zmem__ico"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 12a9 9 0 1 1-3-6.7L21 8M21 3v5h-5"/></svg></span><b>Koreksi dan keputusan</b><small>supaya kesalahan yang sama tidak terulang</small></li>
+                    </ol>
+
+                    <div class="zwin" data-r>
+                        <div class="zwin__bar" aria-hidden="true"><span></span><span></span><span></span><b>penyimpanan terpisah</b></div>
+                        <div class="zwin__body">
+                            <p class="zkpi__label"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 6c0 1.7 3.6 3 8 3s8-1.3 8-3-3.6-3-8-3-8 1.3-8 3zM4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>Disimpan terpisah</p>
+                            <div class="zdbs">
+                                <div class="zdb"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 4h18v16H3zM9 4v16M15 4v16"/></svg><b>Papan kerja mingguan</b></div>
+                                <div class="zdb"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 3v18h18M7 15l4-4 3 3 5-6"/></svg><b>Arsip performa konten</b><small>dasar koreksi performa</small></div>
+                                <div class="zdb"><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><b>Database leads</b></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="zgrid3">
+                        <article class="zcardx" data-r>
+                            <h5><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Leads</h5>
+                            <ul class="zfields"><li>Nama</li><li>Kontak</li><li>Sumber</li><li>Status follow-up</li></ul>
+                            <p>Hanya nama, kontak, sumber, dan status follow-up, dari orang yang memberi kontaknya sendiri. Follow-up disiapkan sebagai draf dan tidak dikirim tanpa persetujuan.</p>
+                        </article>
+                        <article class="zcardx zcardx--danger" data-r>
+                            <h5><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 11h14v10H5zM8 11V7a4 4 0 0 1 8 0v4"/></svg>Tidak pernah disimpan</h5>
+                            <ul class="znever">
+                                <li><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 2l-2 2M15.5 7.5l3 3L22 7l-3-3M15.5 7.5l-4.1 4.1a5.5 5.5 0 1 1-7.8 7.8 5.5 5.5 0 0 1 7.8-7.8"/></svg>Kata sandi</li><li><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 2l-2 2M15.5 7.5l3 3L22 7l-3-3M15.5 7.5l-4.1 4.1a5.5 5.5 0 1 1-7.8 7.8 5.5 5.5 0 0 1 7.8-7.8"/></svg>Token akses</li><li><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2 7h20v12H2zM2 11h20M6 15h4"/></svg>Data pembayaran</li><li><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 5h18v14H3zM7 9h4M7 13h6M15 10h3v4h-3z"/></svg>Dokumen identitas</li><li><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 12h4l2-5 4 10 2-5h6"/></svg>Data kesehatan</li>
+                            </ul>
+                        </article>
+                        <article class="zcardx" data-r>
+                            <h5><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 12a9 9 0 1 1-3-6.7L21 8M21 3v5h-5"/></svg>Perawatan</h5>
+                            <p class="zcycle"><span><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 5h18v16H3zM16 3v4M8 3v4M3 10h18"/></svg></span>Memori ditinjau mingguan.</p>
+                            <p>Kalau ada yang bertentangan, yang terbaru menang, dan yang usang ditandai perlu dicek.</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STATUS -->
+            <section id="zuno-status" class="zband zband--tint" aria-labelledby="zuno-status-title">
+                <div class="zwrap zsplit">
+                    <div>
+                        <p class="zsec__no" data-r><span><svg class="zi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 22V4M4 4h13l-2 4 2 4H4"/></svg></span>Blueprint Zuno</p>
+                        <h3 id="zuno-status-title" class="zsec__title" data-r>Status dan langkah berikutnya</h3>
+                        <p class="zbody" data-r>Zuno masih tahap rancangan dan dibangun bertahap.</p>
+                        <p class="zpill zpill--teal" data-r><span class="zdot"></span>Tahap rancangan</p>
+                    </div>
+                    <div class="zwin" data-r>
+                        <div class="zwin__bar" aria-hidden="true"><span></span><span></span><span></span><b>langkah berikutnya</b></div>
+                        <div class="zwin__body">
+                            <ol class="znext">
+                                <li><span>1</span>Validasi ke calon pengguna</li>
+                                <li><span>2</span>Cek ketersediaan nama dan akun</li>
+                                <li><span>3</span>Verifikasi akses posting dan iklan tiap platform</li>
+                                <li><span>4</span>Tetapkan ukuran konten menang dan jumlah tayangan minimal sebelum Fase 3</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- PANDUAN: pengantar (dulu hero) -->
+        <section id="panduan" class="zguide-intro relative overflow-hidden bg-grid-pattern border-y border-[#0F2E33]/10 pt-14 pb-20 sm:pt-24 sm:pb-28">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                 <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-300 text-xs sm:text-sm font-semibold mb-6">
                     <span>✨ Khusus Pemula Non-Teknis • Tanpa Perlu Latar Belakang Coding</span>
                 </div>
                 
-                <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight mb-6">
+                <p class="zx-eyebrow uppercase text-brand-600 mb-3">Panduan Praktis · Bangun AI Agent Pertamamu dari Nol</p>
+                <h2 class="zx-h2 text-slate-900 mb-6">
                     Bangun Asisten AI yang Bekerja Otomatis Untukmu, <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-emerald-500 dark:from-brand-400 dark:to-emerald-400">Bukan Sekadar Diajak Ngobrol</span>
-                </h1>
+                </h2>
                 
-                <p class="text-base sm:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto mb-10 leading-relaxed">
+                <p class="zx-lead text-slate-600 max-w-2xl mx-auto mb-10">
                     Panduan langkah demi langkah merakit AI agent pertamamu dari nol untuk merangkum dokumen, membalas pesan rutin, dan mengotomatisasi pekerjaan berulang setiap hari.
                 </p>
 
@@ -172,8 +789,8 @@
         <!-- 2. APA ITU AI AGENT -->
         <section id="konsep" class="py-16 sm:py-24 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="max-w-3xl mx-auto text-center mb-14">
-                <span class="text-brand-600 dark:text-brand-400 font-bold text-sm uppercase tracking-wider">Bab 1 • Fondasi Dasar</span>
-                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mt-2 mb-4">Apa Sebenarnya AI Agent Itu?</h2>
+                <span class="text-brand-600 dark:text-brand-400 zx-eyebrow uppercase">Bab 1 • Fondasi Dasar</span>
+                <h2 class="zx-h2 text-slate-900 dark:text-white mt-2 mb-4">Apa Sebenarnya AI Agent Itu?</h2>
                 <p class="text-slate-600 dark:text-slate-300 leading-relaxed">
                     Banyak orang mengira AI Agent sama dengan chatbot biasa seperti ChatGPT. Padahal ada perbedaan besar pada <strong>kemampuan bertindaknya</strong>.
                 </p>
@@ -250,8 +867,8 @@
         <section id="use-case" class="py-16 sm:py-24 bg-slate-100/80 dark:bg-slate-900/50 border-y border-slate-200 dark:border-slate-800">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="max-w-3xl mx-auto text-center mb-14">
-                    <span class="text-brand-600 dark:text-brand-400 font-bold text-sm uppercase tracking-wider">Bab 2 • Inspirasi Nyata</span>
-                    <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mt-2 mb-4">6 Contoh AI Agent untuk Produktivitas Harian</h2>
+                    <span class="text-brand-600 dark:text-brand-400 zx-eyebrow uppercase">Bab 2 • Inspirasi Nyata</span>
+                    <h2 class="zx-h2 text-slate-900 dark:text-white mt-2 mb-4">6 Contoh AI Agent untuk Produktivitas Harian</h2>
                     <p class="text-slate-600 dark:text-slate-300">
                         Jangan mulai dari hal yang terlalu rumit. Berikut 6 contoh agent sederhana yang paling sering dibuat untuk menghemat waktu kerja.
                     </p>
@@ -408,8 +1025,8 @@
         <!-- 4. ROADMAP BUILD DARI NOL (7 LANGKAH INTERAKTIF) -->
         <section id="roadmap" class="py-16 sm:py-24 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-10">
-                <span class="text-brand-600 dark:text-brand-400 font-bold text-sm uppercase tracking-wider">Bab 3 • Panduan Langkah demi Langkah</span>
-                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mt-2 mb-4">Roadmap Membangun AI Agent dari Nol</h2>
+                <span class="text-brand-600 dark:text-brand-400 zx-eyebrow uppercase">Bab 3 • Panduan Langkah demi Langkah</span>
+                <h2 class="zx-h2 text-slate-900 dark:text-white mt-2 mb-4">Roadmap Membangun AI Agent dari Nol</h2>
                 <p class="text-slate-600 dark:text-slate-300">
                     Ikuti 7 langkah berurutan ini. Centang kotak di setiap langkah untuk menyimpan progres belajarmu secara otomatis di perangkat ini.
                 </p>
@@ -785,11 +1402,11 @@
         </section>
 
         <!-- 5. TEMPLATE SIAP PAKAI -->
-        <section id="template" class="py-16 sm:py-24 bg-slate-900 text-slate-100 border-y border-slate-800">
+        <section id="template" class="py-16 sm:py-24 bg-[#0C2B31] text-slate-100 border-y border-[#0F2E33]">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="max-w-3xl mx-auto text-center mb-14">
-                    <span class="text-emerald-400 font-bold text-sm uppercase tracking-wider">Bab 4 • Amunisi Praktik</span>
-                    <h2 class="text-2xl sm:text-4xl font-extrabold text-white mt-2 mb-4">3 Template System Prompt Siap Salin</h2>
+                    <span class="text-emerald-400 zx-eyebrow uppercase">Bab 4 • Amunisi Praktik</span>
+                    <h2 class="zx-h2 text-white mt-2 mb-4">3 Template System Prompt Siap Salin</h2>
                     <p class="text-slate-300">
                         Salin salah satu instruksi di bawah ini ke dalam AI Agent atau asisten kerjamu. Cukup ganti teks di dalam tanda kurung siku <code class="text-amber-300 font-mono">[seperti ini]</code> sesuai kebutuhanmu.
                     </p>
@@ -891,8 +1508,8 @@ FORMAT OUTPUT:
         <!-- 6. STACK & TOOLS PERBANDINGAN -->
         <section id="tools" class="py-16 sm:py-24 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="max-w-3xl mx-auto text-center mb-14">
-                <span class="text-brand-600 dark:text-brand-400 font-bold text-sm uppercase tracking-wider">Bab 5 • Memilih Peralatan</span>
-                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mt-2 mb-4">Perbandingan Jalur: No-Code vs Low-Code vs Coding</h2>
+                <span class="text-brand-600 dark:text-brand-400 zx-eyebrow uppercase">Bab 5 • Memilih Peralatan</span>
+                <h2 class="zx-h2 text-slate-900 dark:text-white mt-2 mb-4">Perbandingan Jalur: No-Code vs Low-Code vs Coding</h2>
                 <p class="text-slate-600 dark:text-slate-300">
                     Kamu tidak perlu menjadi programmer untuk membuat AI Agent yang berguna. Pilih jalur yang paling sesuai dengan kenyamananmu saat ini.
                 </p>
@@ -976,8 +1593,8 @@ FORMAT OUTPUT:
         <section id="keamanan" class="py-16 sm:py-24 bg-slate-100/80 dark:bg-slate-900/50 border-y border-slate-200 dark:border-slate-800">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="max-w-3xl mx-auto text-center mb-14">
-                    <span class="text-brand-600 dark:text-brand-400 font-bold text-sm uppercase tracking-wider">Bab 6 • Prinsip Aman & Hemat</span>
-                    <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mt-2 mb-4">4 Aturan Emas Keamanan & Efisiensi AI Agent</h2>
+                    <span class="text-brand-600 dark:text-brand-400 zx-eyebrow uppercase">Bab 6 • Prinsip Aman & Hemat</span>
+                    <h2 class="zx-h2 text-slate-900 dark:text-white mt-2 mb-4">4 Aturan Emas Keamanan & Efisiensi AI Agent</h2>
                     <p class="text-slate-600 dark:text-slate-300">
                         Agar asisten AI-mu benar-benar membantu dan tidak menimbulkan masalah baru, terapkan empat kebiasaan penting ini sejak hari pertama.
                     </p>
@@ -1034,8 +1651,8 @@ FORMAT OUTPUT:
         <!-- 8. FAQ PEMULA -->
         <section id="faq" class="py-16 sm:py-24 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
-                <span class="text-brand-600 dark:text-brand-400 font-bold text-sm uppercase tracking-wider">Bab 7 • Tanya Jawab</span>
-                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mt-2 mb-4">Pertanyaan yang Sering Diajukan Pemula (FAQ)</h2>
+                <span class="text-brand-600 dark:text-brand-400 zx-eyebrow uppercase">Bab 7 • Tanya Jawab</span>
+                <h2 class="zx-h2 text-slate-900 dark:text-white mt-2 mb-4">Pertanyaan yang Sering Diajukan Pemula (FAQ)</h2>
                 <p class="text-slate-600 dark:text-slate-300">
                     Masih ragu untuk memulai? Berikut jawaban jujur untuk pertanyaan yang paling sering muncul.
                 </p>
@@ -1126,7 +1743,7 @@ FORMAT OUTPUT:
             <div class="max-w-4xl mx-auto rounded-3xl bg-gradient-to-br from-brand-600 via-brand-700 to-slate-900 text-white p-8 sm:p-12 shadow-xl">
                 <div class="max-w-2xl">
                     <span class="inline-block px-3 py-1 rounded-full bg-white/15 text-xs font-semibold uppercase tracking-wider mb-4">Langkah Pertamamu Hari Ini</span>
-                    <h2 class="text-2xl sm:text-4xl font-extrabold mb-4 leading-tight">Jangan Tunggu Paham Semuanya Baru Mulai</h2>
+                    <h2 class="zx-h2 mb-4 leading-tight">Jangan Tunggu Paham Semuanya Baru Mulai</h2>
                     <p class="text-brand-100 mb-8 leading-relaxed text-sm sm:text-base">
                         Cara tercepat memahami AI Agent adalah dengan melihatnya menyelesaikan <strong>satu pekerjaan nyatamu</strong> hari ini. Kamu hanya butuh waktu 15 menit untuk langkah pertama:
                     </p>
@@ -1157,12 +1774,78 @@ FORMAT OUTPUT:
                 </div>
             </div>
         </section>
+
+        <!-- RADAR TOOLS APIFY -->
+
+<section id="radar" class="zradar" aria-labelledby="radar-title">
+<div class="wrap">
+
+  <header class="zradar-head">
+    <p class="zeyebrow">Radar Tools · Apify</p>
+    <h2 id="radar-title">Tools AI agent terbaru di Apify Store</h2>
+    <p class="ringkasan" id="ringkasan" aria-live="polite"><span class="skeleton">Memuat data…</span></p>
+    <p class="meta" id="meta"></p>
+  </header>
+
+  <div id="status"></div>
+
+  <div id="konten" hidden>
+    <section class="panel" aria-labelledby="h-tren">
+      <h2 id="h-tren">Tools baru per minggu</h2>
+      <p class="catatan">Jumlah tools yang dibuat di Apify setiap minggu (mulai hari Senin), dari tools yang sedang dipantau.</p>
+      <div class="chart-box tren"><canvas id="chart-tren" role="img" aria-label="Grafik garis jumlah tools baru per minggu"></canvas></div>
+      <p class="kosong" id="kosong-tren" hidden>Belum ada tanggal pembuatan yang tersimpan untuk digambar.</p>
+    </section>
+
+    <div class="dua-kolom">
+      <section class="panel" aria-labelledby="h-top">
+        <h2 id="h-top">Paling banyak dipakai</h2>
+        <p class="catatan">Sepuluh tools dengan pengguna terbanyak. Klik batang untuk membuka halamannya di Apify.</p>
+        <div class="chart-box bar" id="box-bar"><canvas id="chart-top" role="img" aria-label="Grafik batang tools dengan pengguna terbanyak"></canvas></div>
+      </section>
+
+      <section class="panel" aria-labelledby="h-harga">
+        <h2 id="h-harga">Cara bayarnya</h2>
+        <p class="catatan">Berapa banyak tools untuk tiap model harga.</p>
+        <div class="chart-box donut"><canvas id="chart-harga" role="img" aria-label="Grafik donat distribusi model harga"></canvas></div>
+      </section>
+    </div>
+
+    <section class="panel" aria-labelledby="h-tabel">
+      <h2 id="h-tabel">Semua tools</h2>
+      <p class="catatan">Cari berdasarkan nama, pembuat, kategori, atau deskripsi. Klik judul kolom untuk mengurutkan.</p>
+      <div class="alat">
+        <label for="cari">Cari tools</label>
+        <input type="search" id="cari" placeholder="Cari tools…" autocomplete="off">
+        <label for="filter-harga">Filter model harga</label>
+        <select id="filter-harga"><option value="">Semua model harga</option></select>
+        <span class="jumlah" id="jumlah" aria-live="polite"></span>
+      </div>
+      <div class="tabel-scroll">
+        <table>
+          <caption class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Daftar tools AI agent dari Apify Store</caption>
+          <thead>
+            <tr id="kepala"></tr>
+          </thead>
+          <tbody id="isi"></tbody>
+        </table>
+      </div>
+      <p class="kosong" id="kosong-tabel" hidden>Tidak ada tools yang cocok. Coba kata kunci lain atau hapus filter.</p>
+    </section>
+  </div>
+
+  <footer>
+    Sumber data: Apify Store API. Workflow n8n mengambil data, merapikannya, lalu menyimpannya di Supabase. Halaman ini hanya membaca hasilnya.
+    "Baru" berarti dibuat dalam 7 hari sebelum data diambil.
+  </footer>
+</div>
+</section>
     </main>
 
     <!-- Footer -->
     <footer class="border-t border-slate-200 dark:border-slate-800 py-10 text-center text-xs sm:text-sm text-slate-500 dark:text-slate-400">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p>© 2026 <strong>[Nama Brand / Komunitas Edukasi Anda]</strong>. Dibuat untuk memberdayakan pekerja Indonesia dengan AI praktis.</p>
+            <p>© 2026 <strong>Zuno · AI Creator Labs</strong> oleh Zulnan. Dibuat untuk memberdayakan pekerja Indonesia dengan AI praktis.</p>
             <p class="text-xs">Konten bebas klaim berlebihan • Fokus pada produktivitas nyata.</p>
         </div>
     </footer>
@@ -1369,239 +2052,9 @@ FORMAT OUTPUT:
             });
         })();
     </script>
-</body>
-</html>
-<!doctype html>
-<html lang="id">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Radar Tools AI Agent dari Apify</title>
-<meta name="description" content="Daftar dan grafik tools AI agent terbaru di Apify Store, diperbarui otomatis oleh workflow n8n.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #f2f4f7;
-    --surface: #ffffff;
-    --ink: #17202b;
-    --muted: #566474;
-    --line: #d9dfe6;
-    --accent: #2c46e8;
-    --accent-soft: rgba(44, 70, 232, .12);
-    --warm: #d9730d;
-    --focus: #2c46e8;
-    --c1: #2c46e8;
-    --c2: #d9730d;
-    --c3: #0f8f7a;
-    --c4: #b8327f;
-    --c5: #7a8797;
-    --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
-    --font-body: "Instrument Sans", "Segoe UI", system-ui, sans-serif;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #0e151e;
-      --surface: #162130;
-      --ink: #e8edf3;
-      --muted: #9aa8b8;
-      --line: #28374a;
-      --accent: #8499ff;
-      --accent-soft: rgba(132, 153, 255, .16);
-      --warm: #ffb066;
-      --focus: #a9b8ff;
-      --c1: #8499ff;
-      --c2: #ffb066;
-      --c3: #3fd0b4;
-      --c4: #f08cc3;
-      --c5: #8d9bad;
-    }
-  }
-  :root[data-theme="dark"] {
-    --bg: #0e151e;
-    --surface: #162130;
-    --ink: #e8edf3;
-    --muted: #9aa8b8;
-    --line: #28374a;
-    --accent: #8499ff;
-    --accent-soft: rgba(132, 153, 255, .16);
-    --warm: #ffb066;
-    --focus: #a9b8ff;
-    --c1: #8499ff;
-    --c2: #ffb066;
-    --c3: #3fd0b4;
-    --c4: #f08cc3;
-    --c5: #8d9bad;
-  }
 
-  * { box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--ink);
-    font-family: var(--font-body);
-    font-size: 16px;
-    line-height: 1.55;
-  }
-  a { color: var(--accent); text-underline-offset: 3px; }
-  :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 4px; }
-
-  .wrap { max-width: 1120px; margin: 0 auto; padding: 40px 16px 72px; }
-  @media (min-width: 720px) { .wrap { padding: 56px 32px 96px; } }
-
-  header { max-width: 720px; }
-  h1 {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: clamp(2rem, 5.5vw, 3.4rem);
-    line-height: 1.05;
-    letter-spacing: -0.02em;
-    margin: 0 0 20px;
-  }
-  .ringkasan { font-size: clamp(1.05rem, 2.4vw, 1.3rem); line-height: 1.5; margin: 0 0 8px; max-width: 46ch; }
-  .ringkasan strong { font-weight: 600; }
-  .ringkasan .baru { color: var(--warm); font-family: var(--font-display); font-weight: 700; }
-  .meta { color: var(--muted); font-size: .9rem; margin: 0; }
-  .meta .basi { color: var(--warm); font-weight: 600; }
-
-  .panel { border-top: 1px solid var(--line); padding-top: 20px; margin-top: 40px; }
-  .panel h2 {
-    font-family: var(--font-display);
-    font-weight: 500;
-    font-size: 1.25rem;
-    letter-spacing: -0.01em;
-    margin: 0 0 4px;
-  }
-  .panel .catatan { color: var(--muted); font-size: .9rem; margin: 0 0 16px; max-width: 62ch; }
-
-  .chart-box { position: relative; width: 100%; }
-  .chart-box.tren { height: 300px; }
-  .chart-box.donut { height: 300px; }
-  .chart-box.bar { height: 380px; }
-
-  .dua-kolom { display: grid; gap: 0 48px; grid-template-columns: 1fr; }
-  @media (min-width: 900px) { .dua-kolom { grid-template-columns: 1.35fr 1fr; } }
-
-  .kosong { color: var(--muted); padding: 32px 0; margin: 0; }
-
-  /* Tabel */
-  .alat { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 12px; }
-  .alat label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-  .alat input[type="search"], .alat select {
-    font: inherit;
-    color: var(--ink);
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    padding: 9px 12px;
-    min-height: 44px;
-  }
-  .alat input[type="search"] { flex: 1 1 240px; max-width: 420px; }
-  .alat .jumlah { color: var(--muted); font-size: .9rem; margin-left: auto; }
-
-  .tabel-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); }
-  table { width: 100%; border-collapse: collapse; min-width: 640px; font-size: .95rem; }
-  th, td { text-align: left; padding: 12px 14px; vertical-align: top; border-bottom: 1px solid var(--line); }
-  tbody tr:last-child td { border-bottom: 0; }
-  th { font-weight: 600; white-space: nowrap; background: var(--surface); position: sticky; top: 0; }
-  th button {
-    font: inherit; font-weight: 600; color: inherit; background: none; border: 0; padding: 4px 0; cursor: pointer;
-    display: inline-flex; gap: 6px; align-items: center; min-height: 32px;
-  }
-  th button .panah { color: var(--muted); font-size: .8em; width: 1em; text-align: center; }
-  th[aria-sort="ascending"] .panah, th[aria-sort="descending"] .panah { color: var(--accent); }
-  td.angka, th.angka { text-align: right; }
-  th.angka button { flex-direction: row-reverse; }
-  td .nama { font-weight: 600; }
-  td .oleh { color: var(--muted); font-size: .85rem; }
-  td .desk { color: var(--muted); font-size: .88rem; margin-top: 4px; max-width: 52ch; }
-  td.tgl { white-space: nowrap; }
-  .lencana-baru { display: inline-block; margin-left: 8px; padding: 1px 8px; border-radius: 999px; font-size: .75rem; font-weight: 600; color: var(--warm); border: 1px solid var(--warm); vertical-align: 1px; }
-
-  @media (max-width: 720px) {
-    .kol-kategori, .kol-diubah { display: none; }
-    table { min-width: 560px; }
-    tbody td:first-child { min-width: 200px; }
-  }
-
-  /* Pesan status */
-  .status { border: 1px solid var(--line); border-left: 4px solid var(--warm); background: var(--surface); padding: 16px 18px; border-radius: 6px; max-width: 68ch; margin-top: 32px; }
-  .status h2 { font-family: var(--font-display); font-size: 1.1rem; margin: 0 0 6px; }
-  .status p { margin: 0 0 6px; }
-  .status p:last-child { margin: 0; }
-  .status code { background: var(--accent-soft); padding: 1px 6px; border-radius: 4px; font-size: .9em; }
-
-  footer { margin-top: 56px; color: var(--muted); font-size: .85rem; max-width: 68ch; }
-
-  .skeleton { color: var(--muted); }
-  @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
-</style>
-</head>
-<body>
-<div class="wrap">
-
-  <header>
-    <h1>Tools AI agent terbaru di Apify Store</h1>
-    <p class="ringkasan" id="ringkasan" aria-live="polite"><span class="skeleton">Memuat data…</span></p>
-    <p class="meta" id="meta"></p>
-  </header>
-
-  <div id="status"></div>
-
-  <main id="konten" hidden>
-    <section class="panel" aria-labelledby="h-tren">
-      <h2 id="h-tren">Tools baru per minggu</h2>
-      <p class="catatan">Jumlah tools yang dibuat di Apify setiap minggu (mulai hari Senin), dari tools yang sedang dipantau.</p>
-      <div class="chart-box tren"><canvas id="chart-tren" role="img" aria-label="Grafik garis jumlah tools baru per minggu"></canvas></div>
-      <p class="kosong" id="kosong-tren" hidden>Belum ada tanggal pembuatan yang tersimpan untuk digambar.</p>
-    </section>
-
-    <div class="dua-kolom">
-      <section class="panel" aria-labelledby="h-top">
-        <h2 id="h-top">Paling banyak dipakai</h2>
-        <p class="catatan">Sepuluh tools dengan pengguna terbanyak. Klik batang untuk membuka halamannya di Apify.</p>
-        <div class="chart-box bar" id="box-bar"><canvas id="chart-top" role="img" aria-label="Grafik batang tools dengan pengguna terbanyak"></canvas></div>
-      </section>
-
-      <section class="panel" aria-labelledby="h-harga">
-        <h2 id="h-harga">Cara bayarnya</h2>
-        <p class="catatan">Berapa banyak tools untuk tiap model harga.</p>
-        <div class="chart-box donut"><canvas id="chart-harga" role="img" aria-label="Grafik donat distribusi model harga"></canvas></div>
-      </section>
-    </div>
-
-    <section class="panel" aria-labelledby="h-tabel">
-      <h2 id="h-tabel">Semua tools</h2>
-      <p class="catatan">Cari berdasarkan nama, pembuat, kategori, atau deskripsi. Klik judul kolom untuk mengurutkan.</p>
-      <div class="alat">
-        <label for="cari">Cari tools</label>
-        <input type="search" id="cari" placeholder="Cari tools…" autocomplete="off">
-        <label for="filter-harga">Filter model harga</label>
-        <select id="filter-harga"><option value="">Semua model harga</option></select>
-        <span class="jumlah" id="jumlah" aria-live="polite"></span>
-      </div>
-      <div class="tabel-scroll">
-        <table>
-          <caption class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Daftar tools AI agent dari Apify Store</caption>
-          <thead>
-            <tr id="kepala"></tr>
-          </thead>
-          <tbody id="isi"></tbody>
-        </table>
-      </div>
-      <p class="kosong" id="kosong-tabel" hidden>Tidak ada tools yang cocok. Coba kata kunci lain atau hapus filter.</p>
-    </section>
-  </main>
-
-  <footer>
-    Sumber data: Apify Store API. Workflow n8n mengambil data, merapikannya, lalu menyimpannya di Supabase. Halaman ini hanya membaca hasilnya.
-    "Baru" berarti dibuat dalam 7 hari sebelum data diambil.
-  </footer>
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <!-- Radar Apify: Chart.js + pengambil data -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script>
 /* ============ PENGATURAN: isi dua nilai ini ============
    Pakai anon / publishable key (aman ditaruh di sini karena RLS hanya mengizinkan baca).
@@ -1921,5 +2374,8 @@ matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { if
 
 mulai();
 </script>
+
+    <script src="assets/vendor/motion-13.4.6.min.js" defer></script>
+    <script src="assets/js/zuno.js" defer></script>
 </body>
 </html>
